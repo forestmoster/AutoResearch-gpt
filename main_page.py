@@ -67,12 +67,12 @@ def query_page():
     response1=st.session_state['回答内容']
     count_pass=6-st.session_state['回答次数']
     response1_str = ''.join(response1)
+    query = t.text_area('请输入500字以内提示语，最多连续提问{}次'.format(count_pass))
+    query_response = query + response1_str
     if len(response1)>6:
         del st.session_state['回答内容']
     if t.button('重新开始一个回答,当前次数{}'.format(st.session_state['回答次数'])):
         del st.session_state['回答内容']
-    query = t.text_area('请输入500字以内提示语，最多连续提问{}次'.format(count_pass))
-    query_response = query + response1_str
     if t.button("第{}次提交".format(st.session_state['回答次数'])):
         response = ask_page.ask(query=query_response, model=GPT_MODEL, token_budget=2000 - 500)
         st.write(response)
