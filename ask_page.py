@@ -32,7 +32,6 @@ def query_message(
 
 def ask(
     query: str,
-    df: pd.DataFrame,
     model: str = "gpt-3.5-turbo",
     token_budget: int = 2000 - 500,
     print_message: bool = False,

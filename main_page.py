@@ -7,14 +7,14 @@ import frozen_dir
 import streamlit as st
 # models
 GPT_MODEL = "gpt-3.5-turbo"
-file_path= "./ytnanshanuniversity.csv"
-embeddings_path = frozen_dir.app_path()+file_path
-@st.cache_resource
-def read():
-    s = pd.read_csv(embeddings_path)
-    s['embedding'] = s['embedding'].apply(ast.literal_eval)
-    return s
-s=read()
+# file_path= "./ytnanshanuniversity.csv"
+# embeddings_path = frozen_dir.app_path()+file_path
+# @st.cache_resource
+# def read():
+#     s = pd.read_csv(embeddings_path)
+#     s['embedding'] = s['embedding'].apply(ast.literal_eval)
+#     return s
+# s=read()
 # openai.api_key =input('输入api：')
 # openai_api_key=openai.api_key
 openai_api_key=os.getenv('OPENAI_API_KEY')
@@ -74,7 +74,7 @@ def query_page():
     query = t.text_area('请输入500字以内提示语，最多连续提问{}次'.format(count_pass))
     query_response = query + response1_str
     if t.button("第{}次提交".format(st.session_state['回答次数'])):
-        response = ask_page.ask(query=query_response, df=s, model=GPT_MODEL, token_budget=2000 - 500)
+        response = ask_page.ask(query=query_response, model=GPT_MODEL, token_budget=2000 - 500)
         st.write(response)
         st.write(':yellow[历史回答]',st.session_state['回答内容'])
         st.session_state['回答次数']=st.session_state['回答次数'] + 1
