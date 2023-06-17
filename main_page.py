@@ -64,7 +64,6 @@ def query_page():
     selection = st.empty()
     t = selection.container()
     response1=st.session_state['回答内容']
-    count_pass=6-st.session_state['回答次数']
     response1_str = ''.join(response1)
     if len(response1)>6:
         del st.session_state['回答内容']
@@ -74,18 +73,17 @@ def query_page():
         a, b = st.columns([4, 1])
         user_input = a.text_input(
             label="Your message:",
-            placeholder="What would you like to say?",
+            placeholder="同学，你想说些什么?",
             label_visibility="collapsed",
         )
         b.form_submit_button("Send", use_container_width=True)
-    # query = t.text_area('请输入500字以内提示语，最多连续提问{}次'.format(count_pass))
     query_response = user_input + response1_str
     if user_input:
         response = ask_page.ask(query=query_response, model=GPT_MODEL, token_budget=2000 - 500)
         st.write(response)
         response1.append(response)
         st.session_state['回答次数']=st.session_state['回答次数'] + 1
-    st.write(':yellow[历史回答：]', st.session_state['回答内容'])
+        st.write(':yellow[历史回答：]', st.session_state['回答内容'])
 
 
 
