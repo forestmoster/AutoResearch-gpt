@@ -73,7 +73,7 @@ def query_page():
         del st.session_state['回答内容']
     with st.form("chat_input", clear_on_submit=True):
         a, b = st.columns([4, 1])
-        query=t.text_area('请输入500字以内提示语，最多连续提问{}次'.format(count_pass))
+        query=a.text_area('请输入500字以内提示语，最多连续提问{}次'.format(count_pass))
         b.form_submit_button("Send", use_container_width=True)
 
     # query = t.text_area('请输入500字以内提示语，最多连续提问{}次'.format(count_pass))
