@@ -66,14 +66,11 @@ def query_page():
     response1=st.session_state['回答内容']
     response1_str = ''.join(response1)
 
-
     if len(response1)>6:
         del st.session_state['回答内容']
     if t.button('重新开始一个回答,当前次数{}'.format(st.session_state['回答次数'])):
         del st.session_state['回答内容']
         st.session_state['回答内容'] = []
-        st.write(st.session_state)
-
 
     with st.form("chat_input", clear_on_submit=True):
         a, b = st.columns([4, 1])
@@ -84,19 +81,13 @@ def query_page():
         )
         b.form_submit_button("Send", use_container_width=True)
         query_response = user_input + response1_str
+
     if user_input:
         response = ask_page.ask(query=query_response, model=GPT_MODEL, token_budget=2000 - 500)
         st.write(response)
         response1.append(response)
         st.session_state['回答次数']=st.session_state['回答次数'] + 1
     st.write(':yellow[历史回答：]', st.session_state['回答内容'])
-
-
-
-
-
-
-
 
 # 显示登录或注册页面
 if st.session_state['登录状态']==False and st.session_state['创建状态'] == False:
