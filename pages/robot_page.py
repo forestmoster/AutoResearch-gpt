@@ -4,6 +4,8 @@ from streamlit_chat import message
 import os
 import ask_page
 GPT_MODEL = "gpt-3.5-turbo"
+openai.api_key = openai_api_key=os.getenv('OPENAI_API_KEY')
+
 st.title("💬 烟台南山学院 GPT")
 # openai.api_key = st.secrets.openai_api_key
 if "messages" not in st.session_state:
@@ -21,7 +23,6 @@ for msg in st.session_state.messages:
     message(msg["content"], is_user=msg["role"] == "user",avatar_style="big-ears-neutral")
 
 if user_input:
-    openai.api_key = openai_api_key=os.getenv('OPENAI_API_KEY')
     st.session_state.messages.append({"role": "user", "content": user_input})
     message(user_input, is_user=True)
     response = ask_page.ask(query=st.session_state.messages, model=GPT_MODEL, token_budget=2000 - 500)
