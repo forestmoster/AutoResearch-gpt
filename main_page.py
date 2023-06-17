@@ -71,6 +71,7 @@ def query_page():
         del st.session_state['回答内容']
     if t.button('重新开始一个回答,当前次数{}'.format(st.session_state['回答次数'])):
         del st.session_state['回答内容']
+        st.session_state
 
 
     with st.form("chat_input", clear_on_submit=True):
@@ -88,7 +89,7 @@ def query_page():
         response1.append(response)
         st.session_state['回答次数']=st.session_state['回答次数'] + 1
     st.write(':yellow[历史回答：]', st.session_state['回答内容'])
-    st.session_state
+
 
 
 
