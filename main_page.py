@@ -87,8 +87,8 @@ def query_page():
         st.write(response)
         response1.append(response)
         st.session_state['回答次数']=st.session_state['回答次数'] + 1
-        st.write(':yellow[历史回答：]', st.session_state['回答内容'])
     st.write(':yellow[历史回答：]', st.session_state['回答内容'])
+    st.session_state
 
 
 
