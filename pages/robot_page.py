@@ -4,7 +4,7 @@ from streamlit_chat import message
 import os
 import ask_page
 GPT_MODEL = "gpt-3.5-turbo"
-openai.api_key = openai_api_key=os.getenv('OPENAI_API_KEY')
+openai_api_key=os.getenv('OPENAI_API_KEY')
 
 st.title("💬 烟台南山学院 GPT")
 # openai.api_key = st.secrets.openai_api_key
