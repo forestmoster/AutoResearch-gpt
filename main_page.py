@@ -63,17 +63,17 @@ def query_page():
         st.session_state['回答内容'] = []
     selection = st.empty()
     t = selection.container()
-
     response1=st.session_state['回答内容']
     count_pass=6-st.session_state['回答次数']
     response1_str = ''.join(response1)
+    t.text('请输入500字以内提示语，最多连续提问{}次'.format(count_pass)
     if len(response1)>6:
         del st.session_state['回答内容']
     if t.button('重新开始一个回答,当前次数{}'.format(st.session_state['回答次数'])):
         del st.session_state['回答内容']
     with st.form("chat_input", clear_on_submit=True):
         a, b = st.columns([4, 1])
-        query=a.text_area('请输入500字以内提示语，最多连续提问{}次'.format(count_pass))
+        query=a.text_area('请输入500字以内提示语，最多连续提问{}次'.format(count_pass),label_visibility="collapsed",max_chars=500)
         b.form_submit_button("Send", use_container_width=True)
 
     # query = t.text_area('请输入500字以内提示语，最多连续提问{}次'.format(count_pass))
