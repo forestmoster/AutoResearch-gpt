@@ -77,7 +77,6 @@ def query_page():
         response = ask_page.ask(query=query_response, model=GPT_MODEL, token_budget=2000 - 500)
         st.write(response)
         st.session_state['回答次数']=st.session_state['回答次数'] + 1
-
     st.write(':yellow[历史回答：]', st.session_state['回答内容'])
     response1.append(response)
 
