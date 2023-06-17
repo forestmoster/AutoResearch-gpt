@@ -20,7 +20,7 @@ with st.form("chat_input", clear_on_submit=True):
     b.form_submit_button("Send", use_container_width=True)
 
 for msg in st.session_state.messages:
-    message(msg["content"], is_user=msg["role"] == "user",avatar_style="big-ears-neutral")
+    message(msg["content"], is_user=msg["role"] == "user",avatar_style="big-ears")
 
 if user_input:
     st.session_state.messages.append({"role": "user", "content": user_input})
@@ -28,3 +28,6 @@ if user_input:
     response = ask_page.ask(query=st.session_state.messages, model=GPT_MODEL, token_budget=2000 - 500)
     st.session_state.messages.append(msg)
     message(msg.content)
+
+
+st.session_state
