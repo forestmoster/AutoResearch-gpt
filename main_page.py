@@ -72,11 +72,15 @@ def query_page():
         del st.session_state['回答内容']
     with st.form("chat_input", clear_on_submit=True):
         a, b = st.columns([4, 1])
-        query=a.text_input('请输入500字以内提示语，最多连续提问{}次'.format(count_pass),label_visibility="collapsed",max_chars=500)
+        user_input = a.text_input(
+            label="Your message:",
+            placeholder="What would you like to say?",
+            label_visibility="collapsed",
+        )
         b.form_submit_button("Send", use_container_width=True)
     # query = t.text_area('请输入500字以内提示语，最多连续提问{}次'.format(count_pass))
-    query_response = query + response1_str
-    if query:
+    query_response = user_input + response1_str
+    if user_input:
         response = ask_page.ask(query=query_response, model=GPT_MODEL, token_budget=2000 - 500)
         st.write(response)
         response1.append(response)
