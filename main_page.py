@@ -73,6 +73,7 @@ def query_page():
         del st.session_state['回答内容']
     query = t.text_area('请输入500字以内提示语，最多连续提问{}次'.format(count_pass))
     query_response = query + response1_str
+    t.button('清空')
     if t.button("第{}次提交".format(st.session_state['回答次数'])):
         response = ask_page.ask(query=query_response, model=GPT_MODEL, token_budget=2000 - 500)
         st.write(response)
