@@ -37,7 +37,6 @@ if st.button('重新开始一个回答'):
     # 清空文本输入框的内容
     user_input = ""
 
-st.session_state
 i=0
 for msg in st.session_state.messages:
     i=i+1
