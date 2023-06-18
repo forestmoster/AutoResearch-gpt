@@ -16,7 +16,7 @@ if "回答内容"not in st.session_state:
 if '回答次数' not in st.session_state:
     st.session_state['回答次数'] = 1
 
-with st.button('重新开始一个回答,当前次数{}'.format(st.session_state['回答次数'])):
+with st.button('重新开始一个回答'):
     del st.session_state['回答内容']
     del st.session_state['messages']
     st.session_state["回答内容"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
