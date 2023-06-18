@@ -1,6 +1,6 @@
 import openai
 import streamlit as st
-from streamlit_chat import message as Mess
+from streamlit_chat import message
 import os
 import ask_page
 GPT_MODEL = "gpt-3.5-turbo"
@@ -32,6 +32,8 @@ GPT_MODEL = "gpt-3.5-turbo"
 #
 # st.session_state
 #
+
+
 with st.sidebar:
     openai_api_key = st.text_input('OpenAI API Key', key='chatbot_api_key')
     "[View the source code](https://github.com/streamlit/llm-examples/blob/main/Chatbot.py)"
@@ -52,7 +54,7 @@ with st.form("chat_input", clear_on_submit=True):
     b.form_submit_button("Send", use_container_width=True)
 
 for msg in st.session_state.messages:
-    Mess(msg["content"], is_user=msg["role"] == "user")
+    message(msg["content"], is_user=msg["role"] == "user")
 
 if user_input and not openai_api_key:
     st.info("Please add your OpenAI API key to continue.")
@@ -60,8 +62,8 @@ if user_input and not openai_api_key:
 if user_input and openai_api_key:
     openai.api_key = openai_api_key
     st.session_state.messages.append({"role": "user", "content": user_input})
-    Mess(user_input, is_user=True)
+    message(user_input, is_user=True)
     response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=st.session_state.messages)
     msg = response.choices[0].message
     st.session_state.messages.append(msg)
-    Mess(msg.content)
+    message(msg.content)
