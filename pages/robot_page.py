@@ -38,17 +38,17 @@ import ask_page
 
 openai_api_key = os.getenv('OPENAI_API_KEY')
 
-st.title("💬 Streamlit GPT")
+st.title("💬 烟台南山学院ai助手")
 # openai.api_key = st.secrets.openai_api_key
 if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
+    st.session_state["messages"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
 
 with st.form("chat_input", clear_on_submit=True):
     a, b = st.columns([4, 1])
     user_input = a.text_input(
         label="Your message:",
-        placeholder="What would you like to say?",
-        label_visibility="collapsed",
+        placeholder="在这打字，回答问题",
+        label_visibility="collapsed",max_chars=500
     )
     b.form_submit_button("Send", use_container_width=True)
 i=0
@@ -56,10 +56,8 @@ for msg in st.session_state.messages:
     i=i+1
     message(message=msg["content"], is_user=msg["role"] == "user", key=f"message{i}")
 
-if user_input and not openai_api_key:
-    st.info("Please add your OpenAI API key to continue.")
 
-if user_input and openai_api_key:
+if user_input :
     openai.api_key = openai_api_key
     st.session_state.messages.append({"role": "user", "content": user_input})
     message(user_input, is_user=True)
