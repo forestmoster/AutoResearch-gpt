@@ -18,7 +18,6 @@ with st.form("chat_input", clear_on_submit=True):
         label_visibility="collapsed",
     )
     b.form_submit_button("Send", use_container_width=True)
-#
 i=0
 for msg in st.session_state.messages:
     i=i+1
@@ -27,7 +26,8 @@ for msg in st.session_state.messages:
 if user_input:
     st.session_state.messages.append({"role": "user", "content": user_input})
     message(user_input, is_user=True)
-    msg = ask_page.ask(query=st.session_state.messages, model=GPT_MODEL,token_budget=2000 - 500)
+    response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=st.session_state.messages)
+    msg = response.choices[0].message
     st.session_state.messages.append(msg)
     message(msg.content)
 
