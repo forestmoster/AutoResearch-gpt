@@ -17,11 +17,12 @@ if '回答次数' not in st.session_state:
     st.session_state['回答次数'] = 1
 
 
-# if st.button('重新开始一个回答,当前次数{}'.format(st.session_state['回答次数'])):
-#     del st.session_state["回答内容"]
-#     del st.session_state["messages"]
-#     st.session_state["回答内容"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
-#     st.session_state["messages"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
+if st.button('重新开始一个回答,当前次数{}'.format(st.session_state['回答次数'])):
+    # del st.session_state["回答内容"]
+    # del st.session_state["messages"]
+    st.session_state.clear()
+    st.session_state["回答内容"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
+    st.session_state["messages"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
 
 
 
@@ -33,11 +34,6 @@ with st.form("chat_input", clear_on_submit=True):
         label_visibility="collapsed",max_chars=500
     )
     b.form_submit_button("Send", use_container_width=True)
-    if st.button('重新开始一个回答,当前次数{}'.format(st.session_state['回答次数'])):
-        del st.session_state["回答内容"]
-        del st.session_state["messages"]
-        st.session_state["回答内容"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
-        st.session_state["messages"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
 
 
 
@@ -67,4 +63,4 @@ if user_input :
     # 修改 st.session_state['回答内容'] 中的最后一条消息的内容
     st.session_state['回答内容'][-2]["content"] = user_input
     message(msg.content)
-st.session_state
+
