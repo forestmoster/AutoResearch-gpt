@@ -52,8 +52,9 @@ with st.form("chat_input", clear_on_submit=True):
         label_visibility="collapsed",
     )
     b.form_submit_button("Send", use_container_width=True)
-
-for i, msg in st.session_state.messages:
+i=0
+for msg in st.session_state.messages:
+    i=i+1
     message(message=msg["content"], is_user=msg["role"] == "user", key=f"message{i}")
 
 if user_input and not openai_api_key:
