@@ -82,5 +82,3 @@ if user_input :
     st.session_state['回答内容'][-2]["content"] = user_input
     message(msg.content)
 
-st.session_state
-st.session_state.messages
