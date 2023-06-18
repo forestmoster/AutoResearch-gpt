@@ -27,7 +27,7 @@ def query_message(
             break
         else:
             message += next_article
-    return message + question
+    return question+ message
 
 
 def ask(
