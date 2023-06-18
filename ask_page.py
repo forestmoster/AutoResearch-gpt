@@ -15,8 +15,8 @@ def query_message(
 ) -> str:
     """Return a message for GPT, with relevant source texts pulled from a dataframe."""
     strings,relatednesses = search.pinecrone_search(query,model=model,)
-    introduction = '用下面的文章来回答相关问题，使用中文回答'
-    question = f"Question:{query}"
+    introduction = '用下面的文章来回答相关问题，使用中文回答\n'
+    question = f"Question:{query}\n"
     message = introduction
     for string in strings:
         next_article = f'"\n{string}\n"'
