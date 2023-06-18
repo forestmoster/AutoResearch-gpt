@@ -30,7 +30,7 @@ if st.button('重新开始一个回答,当前次数{}'.format(st.session_state['
     del st.session_state['messages']
     st.session_state["回答内容"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
     st.session_state["messages"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
-
+st.session_state
 i=0
 for msg in st.session_state.messages:
     i=i+1
@@ -56,4 +56,4 @@ if user_input :
     # 修改 st.session_state['回答内容'] 中的最后一条消息的内容
     st.session_state['回答内容'][-2]["content"] = user_input
     message(msg.content)
-
+st.session_state
