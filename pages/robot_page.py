@@ -36,7 +36,7 @@ import ask_page
 # #
 #
 
-st.sidebar()
+add_selectbox = st.sidebar
 openai_api_key = os.getenv('OPENAI_API_KEY')
 
 st.title("💬 Streamlit GPT")
