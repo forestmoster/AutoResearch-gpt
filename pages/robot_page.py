@@ -16,13 +16,12 @@ if "回答内容"not in st.session_state:
 if '回答次数' not in st.session_state:
     st.session_state['回答次数'] = 1
 
-
-if st.button('重新开始一个回答,当前次数{}'.format(st.session_state['回答次数'])):
-    # del st.session_state["回答内容"]
-    # del st.session_state["messages"]
-
-    st.session_state["回答内容"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
-    st.session_state["messages"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
+#
+# if st.button('重新开始一个回答,当前次数{}'.format(st.session_state['回答次数'])):
+#     del st.session_state["回答内容"]
+#     del st.session_state["messages"]
+#     st.session_state["回答内容"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
+#     st.session_state["messages"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
 
 
 
@@ -64,3 +63,8 @@ if user_input :
     st.session_state['回答内容'][-2]["content"] = user_input
     message(msg.content)
 
+if st.button('重新开始一个回答,当前次数{}'.format(st.session_state['回答次数'])):
+    del st.session_state["回答内容"]
+    del st.session_state["messages"]
+    st.session_state["回答内容"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
+    st.session_state["messages"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
