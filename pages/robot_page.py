@@ -63,9 +63,8 @@ for msg in st.session_state.messages:
     message(message=msg["content"], is_user=msg["role"] == "user", key=f"message{i}")
 
 
+
 query_message=query_message(query=user_input,token_budget=2000 - 500,)
-
-
 
 
 if user_input :
@@ -78,7 +77,9 @@ if user_input :
     # response = ask_page.ask_robot(query=query_response, model="gpt-3.5-turbo", token_budget=2000 - 500)
     msg = response.choices[0].message
     st.session_state.messages.append(msg)
-    # st.session_state['回答内容'].append(msg)
+    st.session_state['回答内容'].append(msg)
+    # 修改 st.session_state['回答内容'] 中的最后一条消息的内容
+    st.session_state['回答内容'][-1]["content"] = user_input
     message(msg.content)
 
 st.session_state
