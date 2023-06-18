@@ -60,8 +60,8 @@ for msg in st.session_state.messages:
     i=i+1
     message(message=msg["content"], is_user=msg["role"] == "user", key=f"message{i}")
     st.session_state['回答内容'].append(msg["content"])
-response1_str = ''.join(st.session_state['回答内容'])
-query_response = user_input +st.session_state['回答内容']
+response_str = ''.join(st.session_state['回答内容'])
+query_response = user_input +response_str
 if user_input :
     openai.api_key = openai_api_key
     st.session_state.messages.append({"role": "user", "content": user_input})
