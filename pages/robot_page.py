@@ -16,10 +16,9 @@ if "回答内容"not in st.session_state:
 if '回答次数' not in st.session_state:
     st.session_state['回答次数'] = 1
 
-s=st.button('重新开始一个回答,当前次数{}'.format(st.session_state['回答次数']))
-if s:
-    del st.session_state['回答内容']
-    del st.session_state['messages']
+if st.button('重新开始一个回答,当前次数{}'.format(st.session_state['回答次数'])):
+    del st.session_state["回答内容"]
+    del st.session_state["messages"]
     st.session_state["回答内容"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
     st.session_state["messages"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
 
@@ -32,6 +31,7 @@ with st.form("chat_input", clear_on_submit=True):
         label_visibility="collapsed",max_chars=500
     )
     b.form_submit_button("Send", use_container_width=True)
+
 
 
 st.session_state
