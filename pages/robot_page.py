@@ -79,7 +79,7 @@ if user_input :
     st.session_state.messages.append(msg)
     st.session_state['回答内容'].append(msg)
     # 修改 st.session_state['回答内容'] 中的最后一条消息的内容
-    st.session_state['回答内容'][-1]["content"] = user_input
+    st.session_state['回答内容'][-2]["content"] = user_input
     message(msg.content)
 
 st.session_state
