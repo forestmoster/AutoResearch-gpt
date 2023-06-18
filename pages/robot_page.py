@@ -22,8 +22,10 @@ if st.button('重新开始一个回答'):
     del st.session_state["messages"]
     st.session_state["回答内容"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
     st.session_state["messages"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
-    # 清空文本输入框的内容
     user_input = ""
+    st.write(user_input)
+    # 清空文本输入框的内容
+
 
 with st.form("chat_input", clear_on_submit=True):
     a, b = st.columns([4, 1])
