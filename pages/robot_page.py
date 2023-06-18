@@ -7,7 +7,7 @@ from ask_page import  query_message
 openai_api_key = os.getenv('OPENAI_API_KEY')
 
 st.title("💬 烟台南山学院ai助手")
-st.caption('你可以查询有关南山学院的任何事情，你也可以自己上传:blue[docx文件]')
+st.caption('你可以查询有关南山学院的问题，也可以帮助我完善数据库，上传:blue[docx文件]')
 # openai.api_key = st.secrets.openai_api_key
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
