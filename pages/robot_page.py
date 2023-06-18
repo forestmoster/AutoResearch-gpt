@@ -42,6 +42,8 @@ st.title("💬 烟台南山学院ai助手")
 # openai.api_key = st.secrets.openai_api_key
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
+if '回答内容' not in st.session_state:
+    st.session_state['回答内容'] = []
 
 with st.form("chat_input", clear_on_submit=True):
     a, b = st.columns([4, 1])
@@ -57,13 +59,14 @@ i=0
 for msg in st.session_state.messages:
     i=i+1
     message(message=msg["content"], is_user=msg["role"] == "user", key=f"message{i}")
+    st.session_state['回答内容'].append(msg["content"])
 
 
 if user_input :
     openai.api_key = openai_api_key
     st.session_state.messages.append({"role": "user", "content": user_input})
     message(user_input, is_user=True)
-    response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=st.session_state.messages)
+    response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=st.session_state['回答内容'])
     # response = ask_page.ask_robot(query=st.session_state.messages, model="gpt-3.5-turbo", token_budget=2000 - 500)
     msg = response.choices[0].message
     st.session_state.messages.append(msg)
