@@ -53,8 +53,8 @@ with st.form("chat_input", clear_on_submit=True):
     )
     b.form_submit_button("Send", use_container_width=True)
 
-# for msg in st.session_state.messages:
-#     message(msg["content"], is_user=msg["role"] == "user")
+for msg in st.session_state.messages:
+    message(msg["content"], is_user=msg["role"] )
 #
 if user_input and not openai_api_key:
     st.info("Please add your OpenAI API key to continue.")
