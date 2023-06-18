@@ -17,12 +17,7 @@ if '回答次数' not in st.session_state:
     st.session_state['回答次数'] = 1
 
 
-if st.button('重新开始一个回答'):
-    del st.session_state["回答内容"]
-    del st.session_state["messages"]
-    # st.session_state["回答内容"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
-    # st.session_state["messages"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
-    # 清空文本输入框的内容
+
 
 
 with st.form("chat_input", clear_on_submit=True):
@@ -34,7 +29,13 @@ with st.form("chat_input", clear_on_submit=True):
     )
     b.form_submit_button("Send", use_container_width=True)
 
-
+if st.button('重新开始一个回答'):
+    del st.session_state["回答内容"]
+    del st.session_state["messages"]
+    st.session_state["回答内容"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
+    st.session_state["messages"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
+    # 清空文本输入框的内容
+    user_input = ""
 
 st.session_state
 i=0
