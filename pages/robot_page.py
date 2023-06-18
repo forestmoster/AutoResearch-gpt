@@ -61,12 +61,12 @@ for msg in st.session_state.messages:
     message(message=msg["content"], is_user=msg["role"] == "user", key=f"message{i}")
     st.session_state['回答内容'].append(msg["content"])
 
-
+query_response = user_input +st.session_state['回答内容']
 if user_input :
     openai.api_key = openai_api_key
     st.session_state.messages.append({"role": "user", "content": user_input})
     message(user_input, is_user=True)
-    response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=st.session_state['回答内容'])
+    response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=query_response)
     # response = ask_page.ask_robot(query=st.session_state.messages, model="gpt-3.5-turbo", token_budget=2000 - 500)
     msg = response.choices[0].message
     st.session_state.messages.append(msg)
