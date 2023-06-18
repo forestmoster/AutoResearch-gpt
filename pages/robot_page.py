@@ -56,8 +56,8 @@ with st.form("chat_input", clear_on_submit=True):
 # for msg in st.session_state.messages:
 #     message(msg["content"], is_user=msg["role"] == "user")
 #
-# if user_input and not openai_api_key:
-#     st.info("Please add your OpenAI API key to continue.")
+if user_input and not openai_api_key:
+    st.info("Please add your OpenAI API key to continue.")
 
 if user_input and openai_api_key:
     openai.api_key = openai_api_key
@@ -67,3 +67,4 @@ if user_input and openai_api_key:
     msg = response.choices[0].message
     st.session_state.messages.append(msg)
     message(msg.content)
+st.session_state.messages
