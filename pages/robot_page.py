@@ -44,7 +44,7 @@ st.title("💬 烟台南山学院ai助手")
 # openai.api_key = st.secrets.openai_api_key
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
-if "messages" not in st.session_state:
+if "回答内容"not in st.session_state:
     st.session_state["回答内容"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
 
 with st.form("chat_input", clear_on_submit=True):
