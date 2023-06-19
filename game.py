@@ -6,26 +6,21 @@ import os
 
 openai_api_key = os.getenv('OPENAI_API_KEY')
 
-custom_css = """
+styl = """
 <style>
-    .stForm {
-        position: fixed !important;
-        bottom: 3rem;      
+    .stTextInput {
+        position: fixed;
+        bottom: 3rem;
+        width: 70%;
     }
-
-    .stForm.TextInput {
-        margin-right: 1rem;
-    }
-
-    .stForm.Button {
-        width: 100%;
+    .stButton button {
+        width: 30%;
+        margin-left: 1rem;
     }
 </style>
 """
 
-# Applying custom CSS styles in Streamlit
-st.markdown(custom_css, unsafe_allow_html=True)
-
+st.markdown(styl, unsafe_allow_html=True)
 
 
 st.title("💬 烟台南山学院冒险游戏")
