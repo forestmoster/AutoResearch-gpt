@@ -34,7 +34,6 @@ styl = """
         
         .stButton {
              width: 50%;
-            transform: translateX(-50%);
         }
     }
 </style>
