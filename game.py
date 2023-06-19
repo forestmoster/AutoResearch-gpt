@@ -58,14 +58,14 @@ if "回答内容_game" not in st.session_state:
 #     )
 #     b.form_submit_button("Send", use_container_width=True)
 
-
-a, b = st.columns([4, 1])
-user_input = a.text_input(
-    label="Your message:",
-    placeholder="做出你的选择",
-    label_visibility="collapsed",
-)
-b.button("Send", use_container_width=True)
+with st.form("chat_input", clear_on_submit=True):
+    a, b = st.columns([4, 1])
+    user_input = a.text_input(
+        label="Your message:",
+        placeholder="做出你的选择",
+        label_visibility="collapsed",
+    )
+    b.form_submit_button("Send", use_container_width=True)
 
 
 
@@ -98,7 +98,7 @@ for msg in st.session_state["messages_game"]:
 
 
 
-if user_input and b.button :
+if user_input and b.form_submit_button :
     openai.api_key = openai_api_key
     # st.session_state["messages_game"].insert(0, {"role": "user", "content": user_input})
     # st.session_state["回答内容_game"].insert(0, {"role": "user", "content": user_input})
