@@ -17,7 +17,7 @@ styl = """
     .stButton {
         position: fixed;
         bottom: 3rem;
-        width: 15%;
+        width: 10%;
     }
     .stButton1 {
         right: 1rem;
