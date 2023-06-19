@@ -56,28 +56,6 @@ if st.button('重新开始一个冒险'):
 
 
 
-# 使用CSS样式将输入框固定在底部
-st.markdown(
-    """
-    <style>
-    .fixed-input {
-        position: fixed;
-        bottom: 3rem;
-        width: 100%;
-        padding: 10px;
-        background-color: white;
-        border-top: 1px solid lightgray;
-        box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# 创建一个固定在底部的输入框
-user_input = st.text_input("请输入内容", value="", key="input")
-st.markdown(f'<input class="fixed-input" value="{user_input}" type="text" name="user_input" id="user_input" placeholder="请输入内容">', unsafe_allow_html=True)
-
 
 i=0
 for msg in st.session_state["messages_game"]:
@@ -101,3 +79,27 @@ if user_input :
     # st.session_state["messages_game"].insert(0,msg)
     # st.session_state["回答内容_game"].insert(0,msg)
     message(msg.content)
+
+
+# 使用CSS样式将输入框固定在底部
+st.markdown(
+    """
+    <style>
+    .fixed-input {
+        position: fixed;
+        bottom: 3rem;
+        width: 100%;
+        padding: 10px;
+        background-color: white;
+        border-top: 1px solid lightgray;
+        box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# 创建一个固定在底部的输入框
+user_input = st.text_input("请输入内容", value="", key="input")
+st.markdown(f'<input class="fixed-input" value="{user_input}" type="text" name="user_input" id="user_input" placeholder="请输入内容">', unsafe_allow_html=True)
+
