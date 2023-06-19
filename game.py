@@ -16,14 +16,13 @@ styl = """
     .stTextInput {
         position: fixed;
         bottom: 3rem;
-        width: 50%;
+        width: 55%;
     }
     .stButton Button {
         position: fixed;
         bottom: 7rem;
         width: 15%;
     }
-
 </style>
 """
 
