@@ -15,8 +15,8 @@ styl = """
         position: fixed;
         bottom: 3rem;
         background-color: white;
-        width: 80vw; /* 使用vw定义宽度，表示视窗宽度的40% */
-        height: 5vh; /* 使用vh定义高度，表示视窗高度的5% */
+        max-width: 500px; /* 设置输入框的最大宽度 */
+        max-height: 200px; /* 设置输入框的最大高度 */
         z-index: 2;
         left:5%; /* 调整输入文本框的左边距 */
         border-radius: 36px; /* 设置输入文本框的圆角 */
