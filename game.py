@@ -54,22 +54,13 @@ if st.button('重新开始一个冒险'):
     # 清空文本输入框的内容
     user_input = ""
 
-st.markdown(
-    """
-    <style>
-    .sticky-input {
-        position: sticky;
-        top: 20px;  /* 调整为适合您的位置 */
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
+
+# 使用CSS样式定义输入框的位置和固定属性
 st.markdown(
     """
     <style>
-    .sticky-input {
+    .sticky-container {
         position: fixed;
         bottom: 0;
         left: 0;
@@ -84,9 +75,14 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# 在页面底部创建输入框，并为其添加CSS类名
-user_input = st.text_input("请输入内容", value="", max_chars=None, key=None, type='default', help=None, on_change=None, args=None)
-st.markdown(f'<input class="sticky-input" value="{user_input}" type="text" name="user_input" id="user_input" placeholder="请输入内容">', unsafe_allow_html=True)
+# 在页面底部创建输入框容器
+sticky_container = st.beta_container()
+with sticky_container:
+    user_input = st.text_input("请输入内容")
+
+# 添加CSS类名到容器元素
+sticky_container.markdown('<div class="sticky-container"></div>', unsafe_allow_html=True)
+
 i=0
 for msg in st.session_state["messages_game"]:
     i=i+1
