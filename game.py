@@ -70,18 +70,23 @@ st.markdown(
     """
     <style>
     .sticky-input {
-        position: sticky;
-        top: 20px;  /* 调整为适合您的位置 */
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 10px;
+        background-color: white;
+        border-top: 1px solid lightgray;
+        box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
     }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# 在页面上创建输入框，并为其添加CSS类名
+# 在页面底部创建输入框，并为其添加CSS类名
 user_input = st.text_input("请输入内容", value="", max_chars=None, key=None, type='default', help=None, on_change=None, args=None)
 st.markdown(f'<input class="sticky-input" value="{user_input}" type="text" name="user_input" id="user_input" placeholder="请输入内容">', unsafe_allow_html=True)
-
 i=0
 for msg in st.session_state["messages_game"]:
     i=i+1
