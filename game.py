@@ -27,7 +27,7 @@ styl = """
         left:65%; /* 调整第一个按钮的水平位置 */
         z-index: 3;
     }
-    @media (max-width: 600px) {
+    @media (max-width: 800px) {
                 /* 当屏幕宽度小于等于600px时，改变输入框和按钮的样式和位置 */
                 .stTextInput {
                     width: 90%; /* 缩小输入文本框的宽度 */
