@@ -17,7 +17,7 @@ styl = """
         background-color: white;
         width: 50%;
         z-index: 2;
-        left:25%; /* 调整输入文本框的左边距 */
+        transform: translateX(-50%); /* 使用transform属性将输入框居中 */
         border-radius: 36px; /* 设置输入文本框的圆角 */
     }
     .stButton{
