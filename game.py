@@ -20,10 +20,9 @@ styl = """
         min-width: 700px; /* 设置输入框的最小宽度 */
         width: auto; /* 自适应宽度 */
         max-width: 80%; /* 设置输入框的最大宽度 */
-        max-height: 200px; /* 设置输入框的最大高度 */
-       
+        max-height: 200px; /* 设置输入框的最大高度 */       
         z-index: 2;
-        left:5rem;
+        left:25rem;
         border-radius: 36px; /* 设置输入文本框的圆角 */
     }
     .stButton{
