@@ -13,15 +13,14 @@ styl = """
 <style>
     .stTextInput {
         position: fixed;
-        bottom: 3rem;
+        bottom: 2rem;
         background-color: white;
         right：5%
-
-        width: 100%; /* 自适应宽度 */
+        width: 75%; /* 自适应宽度 */
 
         max-height: 200px; /* 设置输入框的最大高度 */       
         z-index: 2;
-        left:10%;
+        left:25%;
         border-radius: 36px; /* 设置输入文本框的圆角 */
     }
     .stButton{
