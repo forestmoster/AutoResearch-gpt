@@ -16,7 +16,7 @@ styl = """
         bottom: 3rem;
         background-color: white;
         left: 10%; /* 设置输入框距离页面左边的最小距离 */
-        right：10%
+        right：5%
         min-width: 700px; /* 设置输入框的最小宽度 */
         width: auto; /* 自适应宽度 */
         max-width: 80%; /* 设置输入框的最大宽度 */
