@@ -29,7 +29,7 @@ styl = """
     }
     @media screen and (max-width: 600px) {
         .stTextInput {
-            width: 80%;
+            width: 70%;
         }}
         
     @media screen and (max-width: 600px) {
