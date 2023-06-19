@@ -61,19 +61,19 @@ if "回答内容_game" not in st.session_state:
 #     b.form_submit_button("Send", use_container_width=True)
 
 with st.form("chat_input", clear_on_submit=True):
-    a, b ,c= st.columns([4, 1,1])
+    a, b = st.columns([4, 1])
     user_input = a.text_input(
         label="Your message:",
         placeholder="做出你的选择",
         label_visibility="collapsed",
     )
     b.form_submit_button("Send", use_container_width=True)
-    c.form_submit_button("重新开始一个冒险", use_container_width=True, key="restart_button")
 
 
 
 
-if c.form_submit_button('重新开始一个冒险'):
+
+if st.button('重新开始一个冒险'):
     del st.session_state["回答内容_game"]
     del st.session_state["messages_game"]
     st.session_state["messages_game"] = [{"role": "assistant", "content":"现在选择一个校区和学院，让我们开始冒险吧！！！"}]
