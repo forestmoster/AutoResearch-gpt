@@ -15,8 +15,7 @@ styl = """
         position: fixed;
         bottom: 2rem;
         background-color: white;
-        right：5%
-        width:2000px;  
+        right：5%  
         z-index: 2;
         left:25%;
         border-radius: 36px; /* 设置输入文本框的圆角 */
