@@ -8,7 +8,7 @@ openai_api_key = os.getenv('OPENAI_API_KEY')
 
 custom_css = """
 <style>
-     .stForm{
+     .stTextinput{
         position: fixed;
         bottom: 3rem;
         width: 100%;
