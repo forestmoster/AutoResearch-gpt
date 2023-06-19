@@ -73,7 +73,7 @@ with st.form("chat_input", clear_on_submit=True):
 
 
 
-if st.button('重新开始一个冒险'):
+if c.form_submit_button('重新开始一个冒险'):
     del st.session_state["回答内容_game"]
     del st.session_state["messages_game"]
     st.session_state["messages_game"] = [{"role": "assistant", "content":"现在选择一个校区和学院，让我们开始冒险吧！！！"}]
