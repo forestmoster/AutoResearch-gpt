@@ -12,13 +12,18 @@ styl = """
         position: fixed;
         bottom: 3rem;
         width: 45%;
-        float: left;  /* 添加此行 */
+        float: left;
     }
-    .stButton form_submit_button {
+    .stButton {
         position: fixed;
-        bottom: 3rem;  /* 将按钮的位置与输入框对齐 */
-        right: 1rem;  /* 添加此行，将按钮置于右侧 */
+        bottom: 3rem;
         width: 15%;
+    }
+    .stButton1 {
+        right: 1rem;
+    }
+    .stButton2 {
+        right: 17%;
     }
 </style>
 """
