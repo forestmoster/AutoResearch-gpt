@@ -56,7 +56,7 @@ if st.button('重新开始一个冒险'):
 
 
 i=0
-for msg in st.session_state["messages_game"][::-1]:
+for msg in st.session_state["messages_game"]:
     i=i+1
     message(message=msg["content"], is_user=msg["role"] == "user", key=f"message{i}")
 
@@ -64,8 +64,11 @@ for msg in st.session_state["messages_game"][::-1]:
 
 if user_input :
     openai.api_key = openai_api_key
-    st.session_state["messages_game"].append({"role": "user", "content": user_input})
-    st.session_state["回答内容_game"].append({"role": "user", "content": user_input})
+    st.session_state["messages_game"].insert(0, {"role": "user", "content": user_input})
+    st.session_state["回答内容_game"].insert(0, {"role": "user", "content": user_input})
+
+    # st.session_state["messages_game"].append({"role": "user", "content": user_input})
+    # st.session_state["回答内容_game"].append({"role": "user", "content": user_input})
     message(user_input, is_user=True)
     response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages= st.session_state["回答内容_game"])
     msg = response.choices[0].message
