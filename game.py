@@ -6,19 +6,21 @@ import os
 
 openai_api_key = os.getenv('OPENAI_API_KEY')
 
-# 自定义CSS样式
 custom_css = """
 <style>
-    .bottom-container {
+     .stForm{
         position: fixed;
         bottom: 3rem;
         width: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
+        padding: 1rem;
+        background-color: #f5f5f5;
+        box-shadow: 0px -1px 10px rgba(0, 0, 0, 0.1);
     }
 
-    .bottom-container .stTextInput {
+    .bottom-form-container .stText {
         margin-right: 1rem;
     }
 </style>
