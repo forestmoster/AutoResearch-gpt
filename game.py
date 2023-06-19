@@ -33,7 +33,7 @@ styl = """
         }
         
         .stButton {
-            right: 50%;
+             width: 50%;
             transform: translateX(-50%);
         }
     }
