@@ -81,3 +81,12 @@ if user_input :
     message(msg.content)
 
 
+styl = """
+<style>
+    .stTextInput {
+        position: fixed !important;
+        bottom: 3rem;
+    }
+</style>
+"""
+st.markdown(styl, unsafe_allow_html=True)
