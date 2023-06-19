@@ -34,7 +34,7 @@ st.markdown(styl, unsafe_allow_html=True)
 
 
 
-st.title("💬 烟台南山学院冒险游戏")
+st.title("💬 烟台南山学院ai文字游戏")
 st.caption('你是2023年9月的刚进学校的新生，无意间发现了烟台南山学院关于宝藏的秘密，让我们开始探索吧！！！')
 # openai.api_key = st.secrets.openai_api_key
 if "messages_game" not in st.session_state:
