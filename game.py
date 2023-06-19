@@ -18,7 +18,8 @@ styl = """
         max-width: 500px; /* 设置输入框的最大宽度 */
         max-height: 200px; /* 设置输入框的最大高度 */
         z-index: 2;
-        left:5%; /* 调整输入文本框的左边距 */
+        left: 50%;
+        transform: translateX(-50%);
         border-radius: 36px; /* 设置输入文本框的圆角 */
     }
     .stButton{
