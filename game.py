@@ -100,6 +100,5 @@ st.markdown(
 )
 
 # 创建一个固定在底部的输入框
-user_input = st.text_input("请输入内容", value="", key="input")
 st.markdown(f'<input class="fixed-input" value="{user_input}" type="text" name="user_input" id="user_input" placeholder="请输入内容">', unsafe_allow_html=True)
 
