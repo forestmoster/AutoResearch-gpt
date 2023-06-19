@@ -78,4 +78,4 @@ if user_input :
     # st.session_state["messages_game"].insert(0,msg)
     # st.session_state["回答内容_game"].insert(0,msg)
     message(msg.content)
-st.text_input()
+st.text_input('回答内容')
