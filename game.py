@@ -15,11 +15,11 @@ styl = """
         position: fixed;
         bottom: 3rem;
         background-color: white;
-        width:17rem;
+        width:27rem;
         max-width: 80%; /* 设置输入框的最大宽度 */
         max-height: 200px; /* 设置输入框的最大高度 */
         z-index: 2;
-        left: 50%;
+        left:7rem;
         transform: translateX(-50%);
         border-radius: 36px; /* 设置输入文本框的圆角 */
     }
