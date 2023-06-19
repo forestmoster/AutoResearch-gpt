@@ -8,14 +8,25 @@ openai_api_key = os.getenv('OPENAI_API_KEY')
 
 styl = """
 <style>
-    .stTextInput {
-        position: fixed !important;
-        bottom: 3rem;
+    .fixed-input-container {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        padding: 10px;
+        background-color: white;
+        border-top: 1px solid lightgray;
+        box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .fixed-input-container .stTextInput {
+        flex: 1;
+        margin-right: 10px;
     }
 </style>
 """
 st.markdown(styl, unsafe_allow_html=True)
-
 
 st.title("💬 烟台南山学院冒险游戏")
 st.caption('是2023年9月的刚进学校的新生，无意间发现了烟台南山学院关于宝藏的秘密，让我们开始探索吧！！！')
