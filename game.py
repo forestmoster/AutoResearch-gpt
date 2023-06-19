@@ -23,7 +23,7 @@ styl = """
         right: 1rem;
     }
     .stButton2 {
-        right: 17%;
+        right: 7%;
     }
 </style>
 """
