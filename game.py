@@ -18,15 +18,10 @@ styl = """
         bottom: 3rem;
         width: 50%;
     }
-    .stButton  {
+    .stButton Button {
         position: fixed;
         bottom: 7rem;
         width: 10%;
-    }
-    .stFormSubmitButton {
-    position: fixed;
-    bottom: 17rem;
-    width: 10%;
     }
 
 </style>
