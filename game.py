@@ -24,7 +24,7 @@ custom_css = """
         margin-right: 1rem;
     }
 
-    .stForm .stButton button {
+    .stForm .stButton {
         width: 100%;
     }
 </style>
