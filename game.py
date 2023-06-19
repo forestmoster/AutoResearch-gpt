@@ -17,7 +17,7 @@ styl = """
         background-color: white;
         right：5%
 
-        width: 80%; /* 自适应宽度 */
+        width: 75%; /* 自适应宽度 */
         max-width: 80%; /* 设置输入框的最大宽度 */
         max-height: 200px; /* 设置输入框的最大高度 */       
         z-index: 2;
