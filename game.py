@@ -11,13 +11,15 @@ styl = """
     .stTextInput {
         position: fixed;
         bottom: 3rem;
-        width: 55%;
-        float: left;
+        width: 45%;
+        float: left;  /* 添加此行 */
     }
-    .stButton button {
-        margin-left: 0.5rem;
+    .stButton Button {
+        position: fixed;
+        bottom: 3rem;  /* 将按钮的位置与输入框对齐 */
+        right: 1rem;  /* 添加此行，将按钮置于右侧 */
+        width: 15%;
     }
-    
 </style>
 """
 st.markdown(styl, unsafe_allow_html=True)
