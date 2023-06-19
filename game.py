@@ -67,7 +67,7 @@ st.markdown(
 )
 
 user_input = st.text_input("请输入内容", value="", max_chars=None, key=None, type='default', help=None, on_change=None, args=None)
-user_input.markdown(f'<input class="sticky-input" value="{user_input}" type="text" name="user_input" id="user_input" placeholder="请输入内容">', unsafe_allow_html=True)
+st.markdown(f'<input class="sticky-input" value="{user_input}" type="text" name="user_input" id="user_input" placeholder="请输入内容">', unsafe_allow_html=True)
 
 i=0
 for msg in st.session_state["messages_game"]:
