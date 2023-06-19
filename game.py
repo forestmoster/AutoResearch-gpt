@@ -32,13 +32,13 @@ styl = """
             width: 70%;
         }
         
-    .stButton {
-        width:1;
-        left:30%;
-        right:30%;
-        bottom:1.2rem;
-        
-        } }
+        .stButton {
+            width:10%;
+            left:30%;
+            right:30%;
+            bottom:1.2rem;
+            
+            } }
 
 </style>
 """
