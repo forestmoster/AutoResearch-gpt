@@ -15,7 +15,7 @@ styl = """
         position: fixed;
         bottom: 2rem;
         background-color: white;
-        right：700  
+        right:700  
         z-index: 2;
         left:500;
         border-radius: 36px; 
@@ -24,7 +24,7 @@ styl = """
         position: fixed;
         bottom: 2rem;
         left:500; 
-        right：500
+        right:500
         z-index:3;
     }
     @media screen and (max-width: 600px) {
@@ -34,7 +34,7 @@ styl = """
         
       .stButton {
            left:100; 
-           right：100 
+           right:100 
         }
 
 </style>
