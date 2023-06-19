@@ -18,13 +18,13 @@ styl = """
         right：5%  
         z-index: 2;
         left:25%;
-        border-radius: 36px; /* 设置输入文本框的圆角 */
+        border-radius: 36px; 
     }
     .stButton{
         position: fixed;
         bottom: 2rem;
-        left:65%; /* 调整第一个按钮的水平位置 */
-        right：25%
+        left:500; 
+        right：500
         z-index:3;
     }
 </style>
