@@ -66,6 +66,19 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+st.markdown(
+    """
+    <style>
+    .sticky-input {
+        position: sticky;
+        top: 20px;  /* 调整为适合您的位置 */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# 在页面上创建输入框，并为其添加CSS类名
 user_input = st.text_input("请输入内容", value="", max_chars=None, key=None, type='default', help=None, on_change=None, args=None)
 st.markdown(f'<input class="sticky-input" value="{user_input}" type="text" name="user_input" id="user_input" placeholder="请输入内容">', unsafe_allow_html=True)
 
