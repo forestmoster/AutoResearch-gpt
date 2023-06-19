@@ -33,9 +33,8 @@ styl = """
         }}
         
       .stButton {
-           width: 30%;
-           left:800; 
-        right:100;
+           left:20% 
+        right:10%;
         }
 
 </style>
