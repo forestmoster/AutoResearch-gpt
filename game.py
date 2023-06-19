@@ -11,12 +11,12 @@ styl = """
     .stTextInput {
         position: fixed;
         bottom: 3rem;
-        width: 70%;
+        width: 50%;
     }
-    .stButton button {
+    .stButton  {
         position: fixed;
         bottom: 13rem;
-        width: 70%;
+        width: 10%;
     }
 </style>
 """
