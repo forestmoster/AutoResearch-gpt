@@ -26,7 +26,7 @@ styl = """
 
 st.markdown(styl, unsafe_allow_html=True)
 
-st.markdown(styl, unsafe_allow_html=True)
+
 
 
 st.title("💬 烟台南山学院冒险游戏")
