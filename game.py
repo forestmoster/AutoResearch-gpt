@@ -8,6 +8,11 @@ openai_api_key = os.getenv('OPENAI_API_KEY')
 
 styl = """
 <style>
+.stForm {
+        position: fixed;
+        bottom: 3rem;
+        width: 50%;
+    }
     .stTextInput {
         position: fixed;
         bottom: 3rem;
@@ -18,11 +23,7 @@ styl = """
         bottom: 7rem;
         width: 10%;
     }
-    .bButton  {
-        position: fixed;
-        bottom: 7rem;
-        width: 10%;
-    }
+
 </style>
 """
 
@@ -48,21 +49,15 @@ if "回答内容_game" not in st.session_state:
                                           "content": "现在选择你出生的校区和学院，然后开始冒险吧！！！"}]
 
 
-# with st.form("chat_input", clear_on_submit=True):
-#     a, b = st.columns([4, 1])
-#     user_input = a.text_input(
-#         label="Your message:",
-#         placeholder="做出你的选择",
-#         label_visibility="collapsed",
-#     )
-#     b.form_submit_button("Send", use_container_width=True)
-a, b = st.columns([4, 1])
-user_input = a.text_input(
-    label="Your message:",
-    placeholder="做出你的选择",
-    label_visibility="collapsed",
-)
-b.button("Send", use_container_width=True)
+with st.form("chat_input", clear_on_submit=True):
+    a, b = st.columns([4, 1])
+    user_input = a.text_input(
+        label="Your message:",
+        placeholder="做出你的选择",
+        label_visibility="collapsed",
+    )
+    b.form_submit_button("Send", use_container_width=True)
+
 
 
 
