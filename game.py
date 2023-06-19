@@ -54,6 +54,15 @@ if st.button('重新开始一个冒险'):
     # 清空文本输入框的内容
     user_input = ""
 
+styl = """
+<style>
+    .css-1b4mkdh {
+      position: fixed;
+      bottom: 3rem;
+    }
+</style>
+"""
+st.markdown(styl, unsafe_allow_html=True)
 
 
 i=0
