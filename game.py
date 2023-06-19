@@ -17,13 +17,7 @@ styl = """
     .stButton button {
         margin-left: 0.5rem;
     }
-    .button-container {
-        position: fixed;
-        bottom: 3rem;
-        right: 1rem;
-        display: flex;
-        justify-content: flex-end;
-    }
+    
 </style>
 """
 st.markdown(styl, unsafe_allow_html=True)
