@@ -25,7 +25,7 @@ styl = """
     }
     .stFormSubmitButton {
     position: fixed;
-    bottom: 7rem;
+    bottom: 17rem;
     width: 10%;
     }
 
