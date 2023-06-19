@@ -72,3 +72,4 @@ if user_input :
     st.session_state["messages_game"].append(msg)
     st.session_state["回答内容_game"].append(msg)
     message(msg.content)
+st.session_state
