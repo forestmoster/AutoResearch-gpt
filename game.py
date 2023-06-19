@@ -17,13 +17,13 @@ styl = """
         background-color: white;
         width: 50%;
         z-index: 2;
-        transform: translateX(-50%); /* 使用transform属性将输入框居中 */
+        left:15%; /* 调整输入文本框的左边距 */
         border-radius: 36px; /* 设置输入文本框的圆角 */
     }
     .stButton{
         position: fixed;
         bottom: 3rem;
-        left:75%; /* 调整第一个按钮的水平位置 */
+        left:55%; /* 调整第一个按钮的水平位置 */
         z-index: 3;
     }
 
