@@ -56,33 +56,6 @@ if st.button('重新开始一个冒险'):
 
 
 
-# 使用CSS样式定义输入框的位置和固定属性
-st.markdown(
-    """
-    <style>
-    .sticky-container {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        padding: 10px;
-        background-color: white;
-        border-top: 1px solid lightgray;
-        box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# 在页面底部创建输入框容器
-sticky_container = st.beta_container()
-with sticky_container:
-    user_input = st.text_input("请输入内容")
-
-# 添加CSS类名到容器元素
-sticky_container.markdown('<div class="sticky-container"></div>', unsafe_allow_html=True)
-
 i=0
 for msg in st.session_state["messages_game"]:
     i=i+1
