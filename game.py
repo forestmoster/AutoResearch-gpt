@@ -32,10 +32,10 @@ styl = """
             width: 70%;
         }}
         
-    @media screen and (max-width: 600px) {
       .stButton {
-             width: 50%;
-        }}
+           left:100; 
+           right：100 
+        }
 
 </style>
 """
