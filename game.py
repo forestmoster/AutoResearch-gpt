@@ -33,10 +33,11 @@ styl = """
         }
         
     .stButton {
-    width: 70%;
-           left:80%;
-        right:0;
-        bottom: 0;
+    width: 20%;
+           left:70%;
+        right:10%;
+        bottom:2rem;
+        
         } }
 
 </style>
