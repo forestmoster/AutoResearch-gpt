@@ -56,7 +56,7 @@ if st.button('重新开始一个冒险'):
 
 
 i=0
-for msg in st.session_state["messages_game"][::-1]:
+for msg in st.session_state["messages_game"]:
     i=i+1
     message(message=msg["content"], is_user=msg["role"] == "user", key=f"message{i}")
 
@@ -76,6 +76,5 @@ if user_input :
     # st.session_state["回答内容_game"].append(msg)
     st.session_state["messages_game"].insert(0,msg)
     st.session_state["回答内容_game"].insert(0,msg)
-
-    message(msg.content)
+    # message(msg.content)
 st.session_state
