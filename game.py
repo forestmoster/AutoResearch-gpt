@@ -6,14 +6,7 @@ import os
 
 openai_api_key = os.getenv('OPENAI_API_KEY')
 
-with st.sidebar:
-    a, b = st.columns([4, 1])
-    user_input = a.text_input(
-        label="Your message:",
-        placeholder="做出你的选择",
-        label_visibility="collapsed",
-    )
-    b.form_submit_button("Send", use_container_width=True)
+
 
 st.title("💬 烟台南山学院冒险游戏")
 st.caption('是2023年9月的刚进学校的新生，无意间发现了烟台南山学院关于外星人的秘密，让我们开始探索吧！！！')
@@ -29,14 +22,14 @@ if "回答内容"not in st.session_state:
                                                                      "南山校区（在音乐校区山脚下，国学与外语学院、艺术与设计学院），"
                                                                      "音乐校区（在山上，靠近南山旅游景区，音乐与舞蹈学院)。"}]
 
-# with st.form("chat_input", clear_on_submit=True):
-#     a, b = st.columns([4, 1])
-#     user_input = a.text_input(
-#         label="Your message:",
-#         placeholder="做出你的选择",
-#         label_visibility="collapsed",
-#     )
-#     b.form_submit_button("Send", use_container_width=True)
+with st.form("chat_input", clear_on_submit=True):
+    a, b = st.columns([4, 1])
+    user_input = a.text_input(
+        label="Your message:",
+        placeholder="做出你的选择",
+        label_visibility="collapsed",
+    )
+    b.form_submit_button("Send", use_container_width=True)
 
 if st.button('重新开始一个冒险'):
     del st.session_state["回答内容"]
