@@ -19,7 +19,7 @@ styl = """
         max-width: 80%; /* 设置输入框的最大宽度 */
         max-height: 200px; /* 设置输入框的最大高度 */
         z-index: 2;
-        left:17rem;
+        left:5rem;
 
         border-radius: 36px; /* 设置输入文本框的圆角 */
     }
