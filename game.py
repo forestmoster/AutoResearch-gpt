@@ -34,7 +34,7 @@ styl = """
             }
             
             .stButton {
-                left: 50%; /* 将按钮的左侧设置为屏幕中心 */
+                 right：50; /* 将按钮的左侧设置为屏幕中心 */
                 transform: translateX(-50%); /* 水平居中对齐 */
             }
         }
