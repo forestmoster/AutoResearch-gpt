@@ -6,7 +6,7 @@ import os
 
 openai_api_key = os.getenv('OPENAI_API_KEY')
 
-with st.sidebar(clear_on_submit=True):
+with st.sidebar:
     a, b = st.columns([4, 1])
     user_input = a.text_input(
         label="Your message:",
