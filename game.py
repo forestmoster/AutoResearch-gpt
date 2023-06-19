@@ -22,9 +22,6 @@ styl = """
     .stButton1 {
         right: 1rem;
     }
-    .stButton2 {
-        right: 5%;
-    }
 </style>
 """
 st.markdown(styl, unsafe_allow_html=True)
