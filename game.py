@@ -6,27 +6,26 @@ import os
 
 openai_api_key = os.getenv('OPENAI_API_KEY')
 
-styl = """
+# 自定义CSS样式
+custom_css = """
 <style>
-    .fixed-input-container {
+    .bottom-container {
         position: fixed;
-        bottom: 0;
+        bottom: 3rem;
         width: 100%;
-        padding: 10px;
-        background-color: white;
-        border-top: 1px solid lightgray;
-        box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
+        align-items: center;
     }
 
-    .fixed-input-container .stTextInput {
-        flex: 1;
-        margin-right: 10px;
+    .bottom-container .stTextInput {
+        margin-right: 1rem;
     }
 </style>
 """
-st.markdown(styl, unsafe_allow_html=True)
+
+# 在Streamlit中应用自定义CSS样式
+st.markdown(custom_css, unsafe_allow_html=True)
 
 st.title("💬 烟台南山学院冒险游戏")
 st.caption('是2023年9月的刚进学校的新生，无意间发现了烟台南山学院关于宝藏的秘密，让我们开始探索吧！！！')
