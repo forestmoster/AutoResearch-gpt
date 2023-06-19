@@ -18,6 +18,11 @@ styl = """
         bottom: 7rem;
         width: 10%;
     }
+    .bButton  {
+        position: fixed;
+        bottom: 7rem;
+        width: 10%;
+    }
 </style>
 """
 
