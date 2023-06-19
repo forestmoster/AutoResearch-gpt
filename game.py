@@ -64,7 +64,7 @@ if user_input and openai_api_key:
     st.session_state["messages_game"].append({"role": "user", "content": user_input})
     message(user_input, is_user=True)
     response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages= st.session_state["回答内容_game"])
-    msg = response.choices[0].message
+    msg = response.choices[0]["messages_game"]
     st.session_state["messages_game"].append(msg)
     st.session_state["回答内容_game"].append(msg)
     message(msg.content)
