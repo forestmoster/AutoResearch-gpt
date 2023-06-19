@@ -6,7 +6,6 @@ import os
 
 openai_api_key = os.getenv('OPENAI_API_KEY')
 
-# 添加样式
 styl = """
 <style>
     .stTextInput {
@@ -15,15 +14,17 @@ styl = """
         width: 55%;
         float: left;
     }
-    .stButton button {
+    .button-container {
         position: fixed;
         bottom: 3rem;
         right: 1rem;
-        width: 5%;
+        display: flex;
+    }
+    .button-container .stButton button {
+        margin-left: 0.5rem;
     }
 </style>
 """
-
 st.markdown(styl, unsafe_allow_html=True)
 
 
