@@ -17,7 +17,7 @@ styl = """
         background-color: white;
         width: 50%;
         z-index: 2;
-        left: 550px; /* 调整输入文本框的左边距 */
+        left: 450px; /* 调整输入文本框的左边距 */
         border-radius: 36px; /* 设置输入文本框的圆角 */
     }
     .stButton{
