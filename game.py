@@ -60,10 +60,9 @@ for msg in st.session_state["messages_game"]:
     i=i+1
     message(message=msg["content"], is_user=msg["role"] == "user", key=f"message{i}")
 
-if user_input and not openai_api_key:
-    st.info("Please add your OpenAI API key to continue.")
 
-if user_input and openai_api_key:
+
+if user_input :
     openai.api_key = openai_api_key
     st.session_state["messages_game"].append({"role": "user", "content": user_input})
     st.session_state["回答内容_game"].append({"role": "user", "content": user_input})
