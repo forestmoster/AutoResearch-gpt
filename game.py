@@ -8,7 +8,7 @@ openai_api_key = os.getenv('OPENAI_API_KEY')
 
 styl = """
 <style>
-    .stTextInput {
+    .stForm {
         position: fixed !important;
         bottom: 3rem;
     }
