@@ -7,32 +7,30 @@ import os
 
 openai_api_key = os.getenv('OPENAI_API_KEY')
 
-st.markdown(
-    """
-    <style>
-        .container {
-            position: fixed;
-            bottom: 3rem;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
 
-        .stTextInput {
-            width: 50%;
-            border-radius: 36px;
-            margin-right: 10px;
-        }
 
-        .stButton {
-            border-radius: 36px;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+styl = """
+<style>
+    .stTextInput {
+        position: fixed;
+        bottom: 2rem;
+        background-color: white;
+        right：5%  
+        z-index: 2;
+        left:25%;
+        border-radius: 36px; /* 设置输入文本框的圆角 */
+    }
+    .stButton{
+        position: fixed;
+        bottom: 2rem;
+        display: flex;
+        left:65%; /* 调整第一个按钮的水平位置 */
+        z-index:3;
+    }
+</style>
+"""
 
-# st.markdown(styl, unsafe_allow_html=True)
+st.markdown(styl, unsafe_allow_html=True)
 
 
 
