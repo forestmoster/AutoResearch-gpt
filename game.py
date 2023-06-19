@@ -21,7 +21,7 @@ styl = """
     .stButton Button {
         position: fixed;
         bottom: 7rem;
-        width: 10%;
+        width: 115%;
     }
 
 </style>
