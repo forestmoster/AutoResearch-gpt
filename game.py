@@ -54,27 +54,26 @@ if st.button('重新开始一个冒险'):
     # 清空文本输入框的内容
     user_input = ""
 
+with st.form("chat_input", clear_on_submit=True):
+    i=0
+    for msg in st.session_state["messages_game"]:
+        i=i+1
+        message(message=msg["content"], is_user=msg["role"] == "user", key=f"message{i}")
 
-i=0
-for msg in st.session_state["messages_game"]:
-    i=i+1
-    message(message=msg["content"], is_user=msg["role"] == "user", key=f"message{i}")
 
 
+    if user_input :
+        openai.api_key = openai_api_key
+        # st.session_state["messages_game"].insert(0, {"role": "user", "content": user_input})
+        # st.session_state["回答内容_game"].insert(0, {"role": "user", "content": user_input})
 
-if user_input :
-    openai.api_key = openai_api_key
-    st.session_state["messages_game"].insert(0, {"role": "user", "content": user_input})
-    st.session_state["回答内容_game"].insert(0, {"role": "user", "content": user_input})
-
-    # st.session_state["messages_game"].append({"role": "user", "content": user_input})
-    # st.session_state["回答内容_game"].append({"role": "user", "content": user_input})
-    message(user_input, is_user=True)
-    response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages= st.session_state["回答内容_game"])
-    msg = response.choices[0].message
-    # st.session_state["messages_game"].append(msg)
-    # st.session_state["回答内容_game"].append(msg)
-    st.session_state["messages_game"].insert(0,msg)
-    st.session_state["回答内容_game"].insert(0,msg)
-    # message(msg.content)
-st.session_state
+        st.session_state["messages_game"].append({"role": "user", "content": user_input})
+        st.session_state["回答内容_game"].append({"role": "user", "content": user_input})
+        message(user_input, is_user=True)
+        response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages= st.session_state["回答内容_game"])
+        msg = response.choices[0].message
+        st.session_state["messages_game"].append(msg)
+        st.session_state["回答内容_game"].append(msg)
+        # st.session_state["messages_game"].insert(0,msg)
+        # st.session_state["回答内容_game"].insert(0,msg)
+        message(msg.content)
