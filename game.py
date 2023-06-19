@@ -15,9 +15,9 @@ styl = """
         position: fixed;
         bottom: 2rem;
         background-color: white;
-        right：5%  
+        right：700  
         z-index: 2;
-        left:25%;
+        left:500;
         border-radius: 36px; 
     }
     .stButton{
