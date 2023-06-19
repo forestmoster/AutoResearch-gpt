@@ -56,7 +56,7 @@ if st.button('重新开始一个冒险'):
 
 
 i=0
-for msg in st.session_state["messages_game"]:
+for msg in st.session_state["messages_game"][::-1]:
     i=i+1
     message(message=msg["content"], is_user=msg["role"] == "user", key=f"message{i}")
 
