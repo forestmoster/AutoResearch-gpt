@@ -30,7 +30,7 @@ styl = """
      @media (max-width: 600px) {
             /* 当屏幕宽度小于等于600px时，改变输入框和按钮的样式和位置 */
             .stTextInput {
-                right：100; /* 缩小输入文本框的宽度 */
+                width：100; /* 缩小输入文本框的宽度 */
             }
             
             .stButton {
