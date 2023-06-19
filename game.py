@@ -19,7 +19,7 @@ styl = """
         bottom: 3rem;
         width: 15%;
     }
-    .stButton1 {
+    .stButton {
         right: 1rem;
     }
 </style>
