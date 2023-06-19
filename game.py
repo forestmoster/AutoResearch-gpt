@@ -43,6 +43,7 @@ styl = """
         margin-left: 1rem;
     }
 </style>
+"""
 st.markdown(styl, unsafe_allow_html=True)
 
 
