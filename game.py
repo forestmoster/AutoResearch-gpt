@@ -17,10 +17,13 @@ styl = """
     .stButton {
         position: fixed;
         bottom: 3rem;
-        width: 5%;
+        width: 15%;
     }
-    .stButton {
+    .stButton1 {
         right: 1rem;
+    }
+    .stButton2 {
+        right: 17%;
     }
 </style>
 """
@@ -58,13 +61,14 @@ if "回答内容_game" not in st.session_state:
 #     b.form_submit_button("Send", use_container_width=True)
 
 with st.form("chat_input", clear_on_submit=True):
-    a, b = st.columns([4, 1])
+    a, b ,c= st.columns([4, 1,1])
     user_input = a.text_input(
         label="Your message:",
         placeholder="做出你的选择",
         label_visibility="collapsed",
     )
     b.form_submit_button("Send", use_container_width=True)
+    c.form_submit_button("重新开始一个冒险", use_container_width=True, key="restart_button")
 
 
 
