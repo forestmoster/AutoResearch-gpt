@@ -14,8 +14,9 @@ styl = """
         width: 70%;
     }
     .stButton button {
-        width: 30%;
-        margin-left: 1rem;
+        position: fixed;
+        bottom: 3rem;
+        width: 70%;
     }
 </style>
 """
