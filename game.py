@@ -12,10 +12,12 @@ styl = """
         position: fixed;
         bottom: 3rem;
         width: 55%;
+        float: left;  /* 添加此行 */
     }
     .stButton Button {
         position: fixed;
-        bottom: 7rem;
+        bottom: 3rem;  /* 将按钮的位置与输入框对齐 */
+        right: 1rem;  /* 添加此行，将按钮置于右侧 */
         width: 15%;
     }
 </style>
