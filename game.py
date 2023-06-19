@@ -15,6 +15,7 @@ styl = """
         position: fixed;
         bottom: 3rem;
         background-color: white;
+        width: 75%;
         max-width: 80%; /* 设置输入框的最大宽度 */
         max-height: 200px; /* 设置输入框的最大高度 */
         z-index: 2;
