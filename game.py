@@ -21,7 +21,8 @@ if "回答内容" not in st.session_state:
                                                                        "南山校区（在音乐校区山脚下，国学与外语学院、艺术与设计学院），"
                                                                        "音乐校区（在山上，靠近南山旅游景区，音乐与舞蹈学院)。"},
                                          {"role": "assistant",
-                                          "content": "现在选择一个校区和学院，让我们开始冒险吧！！！"}]
+                                          "content": "现在选择一个校区和学院，然后开始冒险吧！！！"}]
+
 
 with st.form("chat_input", clear_on_submit=True):
     a, b = st.columns([4, 1])
@@ -51,7 +52,7 @@ if st.button('重新开始一个冒险'):
 
 
 i=0
-for msg in st.session_state.messages_game:
+for msg in st.session_state["messages_game"]:
     i=i+1
     message(message=msg["content"], is_user=msg["role"] == "user", key=f"message{i}")
 
@@ -60,12 +61,11 @@ if user_input and not openai_api_key:
 
 if user_input and openai_api_key:
     openai.api_key = openai_api_key
-    st.session_state.messages_game.append({"role": "user", "content": user_input})
-
+    st.session_state["messages_game"].append({"role": "user", "content": user_input})
     message(user_input, is_user=True)
     response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages= st.session_state["回答内容_game"])
     msg = response.choices[0].message
-    st.session_state.messages_game.append(msg)
+    st.session_state["messages_game"].append(msg)
     st.session_state["回答内容_game"].append(msg)
     message(msg.content)
 st.session_state
