@@ -6,44 +6,21 @@ import os
 
 openai_api_key = os.getenv('OPENAI_API_KEY')
 
-# styl = """
-# <style>
-# .stForm {
-#         position: fixed;
-#         bottom: 3rem;
-#         width: 50%;
-#     }
-#     .stTextInput {
-#         position: fixed;
-#         bottom: 3rem;
-#         width: 55%;
-#     }
-#     .stButton Button {
-#         position: fixed;
-#         bottom: 7rem;
-#         width: 15%;
-#     }
-# </style>
-# """
 styl = """
 <style>
-    .stForm {
+    .stTextInput {
         position: fixed;
         bottom: 3rem;
-        display: flex;
-        align-items: flex-end;
-        justify-content: flex-end;
-        width: 100%;
+        width: 55%;
     }
-    .stTextInput {
-        width: 70%;
-    }
-    .stButton button {
+    .stButton Button {
+        position: fixed;
+        bottom: 7rem;
         width: 15%;
-        margin-left: 1rem;
     }
 </style>
 """
+
 st.markdown(styl, unsafe_allow_html=True)
 
 
