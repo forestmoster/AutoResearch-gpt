@@ -15,12 +15,12 @@ styl = """
         position: fixed;
         bottom: 3rem;
         background-color: white;
-        width:27rem;
+        width:24rem;
         max-width: 80%; /* 设置输入框的最大宽度 */
         max-height: 200px; /* 设置输入框的最大高度 */
         z-index: 2;
-        left:7rem;
-        transform: translateX(-50%);
+        left:17rem;
+
         border-radius: 36px; /* 设置输入文本框的圆角 */
     }
     .stButton{
