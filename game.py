@@ -1,5 +1,4 @@
 
-import time
 import openai
 import streamlit as st
 from streamlit_chat import message
@@ -54,18 +53,6 @@ if "回答内容_game" not in st.session_state:
                                           "content": "现在选择你出生的校区和学院，然后开始冒险吧！！！"}]
 
 
-# with st.form("chat_input", clear_on_submit=True):
-#     a, b = st.columns([4, 1])
-#     user_input = a.text_input(
-#         label="Your message:",
-#         placeholder="做出你的选择",
-#         label_visibility="collapsed",
-#     )
-#     b.form_submit_button("Send", use_container_width=True)
-
-
-
-
 
 with st.form("my_form", clear_on_submit=True):
     st.header("🎈欢迎🎉🎉🎉新同学🎉🎉🎉入学🎈")
@@ -107,9 +94,6 @@ for msg in st.session_state["messages_game"]:
 
 if user_input :
     openai.api_key = openai_api_key
-    # st.session_state["messages_game"].insert(0, {"role": "user", "content": user_input})
-    # st.session_state["回答内容_game"].insert(0, {"role": "user", "content": user_input})
-
     st.session_state["messages_game"].append({"role": "user", "content": user_input})
     st.session_state["回答内容_game"].append({"role": "user", "content": user_input})
     message(user_input, is_user=True)
@@ -117,33 +101,9 @@ if user_input :
     msg = response.choices[0].message
     st.session_state["messages_game"].append(msg)
     st.session_state["回答内容_game"].append(msg)
-    # st.session_state["messages_game"].insert(0,msg)
-    # st.session_state["回答内容_game"].insert(0,msg)
     message(msg.content)
 
 
-# styl = """
-# <style>
-#     .stTextInput {
-#         position: fixed;
-#         bottom: 3rem;
-#         background-color: white;
-#         width: 50%;
-#         z-index: 2;
-#         left: 550px; /* 调整输入文本框的左边距 */
-#         border-radius: 36px; /* 设置输入文本框的圆角 */
-#     }
-#     .stButton{
-#         position: fixed;
-#         bottom: 3rem;
-#         left: 1400px; /* 调整第一个按钮的水平位置 */
-#         z-index: 3;
-#     }
-#
-# </style>
-# """
-#
-# st.markdown(styl, unsafe_allow_html=True)
 
 
 
