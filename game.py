@@ -54,7 +54,7 @@ if st.button('重新开始一个冒险'):
     # 清空文本输入框的内容
     user_input = ""
 
-with st.form("chat_input", clear_on_submit=True):
+with st.form():
     i=0
     for msg in st.session_state["messages_game"]:
         i=i+1
