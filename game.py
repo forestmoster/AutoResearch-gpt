@@ -10,21 +10,14 @@ custom_css = """
 <style>
     .stForm {
         position: fixed !important;
-        bottom: 3rem;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 1rem;
-        background-color: #f5f5f5;
-        box-shadow: 0px -1px 10px rgba(0, 0, 0, 0.1);
+        bottom: 3rem;      
     }
 
-    .stForm .stTextInput {
+    .stForm.TextInput {
         margin-right: 1rem;
     }
 
-    .stForm .stButton {
+    .stForm.Button {
         width: 100%;
     }
 </style>
