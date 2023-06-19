@@ -24,8 +24,8 @@ styl = """
     }
     .stButton{
         position: fixed;
-        bottom: 3rem;
-        left:55%; /* 调整第一个按钮的水平位置 */
+        bottom: 2rem;
+        left:75%; /* 调整第一个按钮的水平位置 */
         z-index: 3;
     }
 
