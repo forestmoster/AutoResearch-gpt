@@ -19,7 +19,7 @@ styl = """
         position: fixed;
         bottom: 3rem;
         right: 1rem;
-        width: 15%;
+        width: 5%;
     }
 </style>
 """
