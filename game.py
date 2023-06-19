@@ -23,8 +23,8 @@ styl = """
     .stButton{
         position: fixed;
         bottom: 2rem;
-        display: flex;
         left:65%; /* 调整第一个按钮的水平位置 */
+        right：25%
         z-index:3;
     }
 </style>
