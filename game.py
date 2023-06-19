@@ -35,6 +35,7 @@ styl = """
       .stButton {
            left:20% 
         right:10%;
+        bottom: 0;
         }
 
 </style>
