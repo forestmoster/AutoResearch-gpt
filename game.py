@@ -6,29 +6,6 @@ import os
 
 openai_api_key = os.getenv('OPENAI_API_KEY')
 
-styl = """
-<style>
-    .stTextInput {
-        position: fixed;
-        bottom: 3rem;
-        width: 45%;
-        float: left;
-    }
-    .stButton {
-        position: fixed;
-        bottom: 3rem;
-        width: 10%;
-    }
-    .stButton1 {
-        right: 1rem;
-    }
-    .stButton2 {
-        right: 7%;
-    }
-</style>
-"""
-st.markdown(styl, unsafe_allow_html=True)
-
 
 
 
@@ -69,11 +46,7 @@ with st.form("chat_input", clear_on_submit=True):
     )
     b.form_submit_button("Send", use_container_width=True)
 
-
-
-
-
-if st.button('重新开始一个冒险'):
+if st.button('重新开始一个冒险' ,key='restart_button'):
     del st.session_state["回答内容_game"]
     del st.session_state["messages_game"]
     st.session_state["messages_game"] = [{"role": "assistant", "content":"现在选择一个校区和学院，让我们开始冒险吧！！！"}]
@@ -101,7 +74,7 @@ for msg in st.session_state["messages_game"]:
 
 
 
-if user_input  :
+if user_input :
     openai.api_key = openai_api_key
     # st.session_state["messages_game"].insert(0, {"role": "user", "content": user_input})
     # st.session_state["回答内容_game"].insert(0, {"role": "user", "content": user_input})
