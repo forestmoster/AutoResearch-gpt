@@ -47,8 +47,8 @@ if st.button('重新开始一个冒险'):
                                                                            "音乐校区（在山上，靠近南山旅游景区，音乐与舞蹈学院)。"},
                                              {"role": "assistant",
                                               "content": "现在选择一个校区和学院，让我们开始冒险吧！！！"}]
-    # 清空文本输入框的内容
-    user_input = ""
+        # 清空文本输入框的内容
+        user_input = ""
 
 
 i=0
@@ -64,7 +64,7 @@ if user_input and openai_api_key:
     st.session_state["messages_game"].append({"role": "user", "content": user_input})
     message(user_input, is_user=True)
     response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages= st.session_state["回答内容_game"])
-    msg = response.choices[0]["messages_game"]
+    msg = response.choices[0].message
     st.session_state["messages_game"].append(msg)
     st.session_state["回答内容_game"].append(msg)
     message(msg.content)
