@@ -64,4 +64,3 @@ if user_input and openai_api_key:
     st.session_state.messages.append(msg)
     st.session_state['回答内容'].append(msg)
     message(msg.content)
-st.session_state
