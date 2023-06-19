@@ -54,26 +54,40 @@ if st.button('重新开始一个冒险'):
     # 清空文本输入框的内容
     user_input = ""
 
-with st.form("my_form"):
-    i=0
-    for msg in st.session_state["messages_game"]:
-        i=i+1
-        message(message=msg["content"], is_user=msg["role"] == "user", key=f"message{i}")
+st.markdown(
+    """
+    <style>
+    .sticky-input {
+        position: sticky;
+        top: 20px;  /* 调整为适合您的位置 */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+user_input = st.text_input("请输入内容", value="", max_chars=None, key=None, type='default', help=None, on_change=None, args=None)
+user_input.markdown(f'<input class="sticky-input" value="{user_input}" type="text" name="user_input" id="user_input" placeholder="请输入内容">', unsafe_allow_html=True)
+
+i=0
+for msg in st.session_state["messages_game"]:
+    i=i+1
+    message(message=msg["content"], is_user=msg["role"] == "user", key=f"message{i}")
 
 
 
-    if user_input :
-        openai.api_key = openai_api_key
-        # st.session_state["messages_game"].insert(0, {"role": "user", "content": user_input})
-        # st.session_state["回答内容_game"].insert(0, {"role": "user", "content": user_input})
+if user_input :
+    openai.api_key = openai_api_key
+    # st.session_state["messages_game"].insert(0, {"role": "user", "content": user_input})
+    # st.session_state["回答内容_game"].insert(0, {"role": "user", "content": user_input})
 
-        st.session_state["messages_game"].append({"role": "user", "content": user_input})
-        st.session_state["回答内容_game"].append({"role": "user", "content": user_input})
-        message(user_input, is_user=True)
-        response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages= st.session_state["回答内容_game"])
-        msg = response.choices[0].message
-        st.session_state["messages_game"].append(msg)
-        st.session_state["回答内容_game"].append(msg)
-        # st.session_state["messages_game"].insert(0,msg)
-        # st.session_state["回答内容_game"].insert(0,msg)
-        message(msg.content)
+    st.session_state["messages_game"].append({"role": "user", "content": user_input})
+    st.session_state["回答内容_game"].append({"role": "user", "content": user_input})
+    message(user_input, is_user=True)
+    response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages= st.session_state["回答内容_game"])
+    msg = response.choices[0].message
+    st.session_state["messages_game"].append(msg)
+    st.session_state["回答内容_game"].append(msg)
+    # st.session_state["messages_game"].insert(0,msg)
+    # st.session_state["回答内容_game"].insert(0,msg)
+    message(msg.content)
