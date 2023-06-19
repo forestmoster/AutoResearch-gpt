@@ -14,14 +14,15 @@ styl = """
         width: 55%;
         float: left;
     }
+    .stButton button {
+        margin-left: 0.5rem;
+    }
     .button-container {
         position: fixed;
         bottom: 3rem;
         right: 1rem;
         display: flex;
-    }
-    .button-container .stButton button {
-        margin-left: 0.5rem;
+        justify-content: flex-end;
     }
 </style>
 """
