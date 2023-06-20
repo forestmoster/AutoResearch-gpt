@@ -31,11 +31,12 @@ styl = """
         .stTextInput {
             width: 78%;
             bottom: 3rem;
+            transform: translateX(-50%); /* 水平居中对齐 */
         }
         
         .stButton {
-            left:10%;
-    
+            transform: translateX(-50%); /* 水平居中对齐 */
+            left:10%;            
             bottom:0rem;
             
             } }
