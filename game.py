@@ -35,7 +35,7 @@ styl = """
         .stButton {
             width:0.01;
             left:80%;
-            right:80%;
+            right:0%;
             bottom:2rem;
             
             } }
