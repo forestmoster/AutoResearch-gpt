@@ -47,19 +47,7 @@ styl = """
             bottom:0rem;            
             } }
 </style>
-<script>
-    // 在页面加载完成后执行
-    window.addEventListener('DOMContentLoaded', function() {
-        var backgroundPanel = document.createElement('div');
-        backgroundPanel.classList.add('backgroundPanel');
-        
-        // 获取页面的背景颜色
-        var backgroundColor = window.getComputedStyle(document.body).backgroundColor;
-        backgroundPanel.style.backgroundColor = backgroundColor;
-        
-        document.body.appendChild(backgroundPanel);
-    });
-</script>
+
 <div class="backgroundPanel"></div>
 """
 
