@@ -40,8 +40,6 @@ styl = """
             left:2%;  
             width: 100%;       
             bottom:0rem;
-            padding: 10px 5px; /* 设置按钮的内边距，控制按钮尺寸 */
-            width: auto; /* 让按钮宽度根据内容自动调整 */ 
             z-index:3; 
         }          
     } 
