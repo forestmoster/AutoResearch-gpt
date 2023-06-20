@@ -33,13 +33,17 @@ styl = """
             left:2%; 
             width: 100%;
             bottom: 2.1rem;  
-            z-index:2;          
+            z-index:2; 
+            height: 40px; /* 设置输入框在移动设备上的高度 */
+        }         
         }        
         .stButton {            
             left:2%;  
             width: 100%;       
             bottom:0rem; 
-            z-index:3;           
+            z-index:3; 
+            height: 40px; /* 设置输入框在移动设备上的高度 */
+        }          
         } 
     }
 </style>
