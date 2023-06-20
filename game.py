@@ -27,16 +27,15 @@ styl = """
         right:500;
         z-index:3;
     }
-    .backgroundPanel {    
+    .backgroundBlock {
         position: fixed;
         bottom: 0;
-        top: 0;
         left: 0;
         width: 100%;
-        height: 10%;
-        background-color: white; /* 设置背景颜色为白色，可根据需要修改 */
-        z-index: 1; /* 确保背景板位于其他元素之后 */
-    }
+        height: 100px; /* 设置纯块的高度，根据需要进行调整 */
+        background-color: white; /* 设置纯块的背景颜色为白色 */
+        z-index: -1; /* 将纯块放置在其他元素的下方 */
+    }   
     @media screen and (max-width: 1000px) {
         .stTextInput {
             width: 78%;
@@ -45,7 +44,8 @@ styl = """
         .stButton {            
             left:8%;         
             bottom:0rem;            
-            } }
+        } 
+    }
 </style>
 
 <div class="backgroundPanel"></div>
