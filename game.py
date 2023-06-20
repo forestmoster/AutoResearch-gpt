@@ -34,7 +34,6 @@ styl = """
             width: 100%;
             bottom: 2.1rem;  
             z-index:2; 
-
         }         
                
         .stButton {            
@@ -46,7 +45,7 @@ styl = """
             width: auto; /* 让按钮宽度根据内容自动调整 */ 
             z-index:3; 
         }          
-        } 
+    } 
 
 </style>
 
