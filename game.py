@@ -34,8 +34,7 @@ styl = """
             width: 100%;
             bottom: 2.1rem;  
             z-index:2; 
-        }         
-               
+        }                        
         .stButton {            
             left:2%;  
             width: 100%;       
