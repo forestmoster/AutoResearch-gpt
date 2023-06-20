@@ -36,7 +36,7 @@ styl = """
             width:0.01;
             left:80%;
             right:0%;
-            bottom:6rem;
+            bottom:3rem;
             
             } }
 
