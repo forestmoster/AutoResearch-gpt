@@ -27,7 +27,7 @@ styl = """
         right:500;
         z-index:3;
     }
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: 1000px) {
         .stTextInput {
             width: 70%;
         }
