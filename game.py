@@ -32,12 +32,14 @@ styl = """
         .stTextInput {
             left:2%; 
             width: 100%;
-            bottom: 2.1rem;            
+            bottom: 2.1rem;  
+            z-index:2;          
         }        
         .stButton {            
             left:2%;  
             width: 100%;       
-            bottom:0rem;            
+            bottom:0rem; 
+            z-index:3;           
         } 
     }
 </style>
