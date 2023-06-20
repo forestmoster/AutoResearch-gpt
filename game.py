@@ -32,7 +32,7 @@ styl = """
         top: 0;
         left: 0;
         width: 100%;
-        height: 100%;
+        height: 10%;
         background-color: white; /* 设置背景颜色为白色，可根据需要修改 */
         z-index: 1; /* 确保背景板位于其他元素之后 */
     }
