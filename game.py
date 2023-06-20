@@ -16,7 +16,7 @@ styl = """
         bottom: 2rem;
         background-color: white;
         right:700  
-        z-index:2;
+        z-index:3;
         left:500;
         border-radius: 36px; 
     }
@@ -25,7 +25,7 @@ styl = """
         bottom: 2rem;
         left:500; 
         right:500;
-        z-index:3;
+        z-index:4;
     }
 
     @media screen and (max-width: 1000px) {
