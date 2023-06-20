@@ -27,22 +27,24 @@ styl = """
         right:500;
         z-index:3;
     }
+    .backgroundPanel {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: white; /* 设置背景颜色为白色，可根据需要修改 */
+        z-index: 1; /* 确保背景板位于其他元素之后 */
+    }
     @media screen and (max-width: 1000px) {
         .stTextInput {
             width: 78%;
             bottom: 3rem;
-
-
-        }
-        
-        .stButton {
-            
-            left:8%;  
-       
-            bottom:0rem;
-            
+        }        
+        .stButton {            
+            left:8%;         
+            bottom:0rem;            
             } }
-
 </style>
 """
 
