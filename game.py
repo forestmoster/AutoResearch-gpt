@@ -29,8 +29,8 @@ styl = """
     }
     @media screen and (max-width: 1000px) {
         .stTextInput {
-            width: 70%;
-            bottom: 2rem;
+            width: 80%;
+            bottom: 3rem;
         }
         
         .stButton {
