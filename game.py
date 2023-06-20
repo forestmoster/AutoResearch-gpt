@@ -34,7 +34,7 @@ styl = """
             width: 100%;
             bottom: 2.1rem;  
             z-index:2; 
-            padding: 10px 20px; /* 设置按钮的内边距，控制按钮尺寸 */
+            padding: 10px 500px; /* 设置按钮的内边距，控制按钮尺寸 */
             height: auto; /* 让按钮高度根据内容自动调整 */
             width: auto; /* 让按钮宽度根据内容自动调整 */
         }         
