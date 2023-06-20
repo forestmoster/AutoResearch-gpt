@@ -46,6 +46,7 @@ styl = """
             bottom:0rem;            
             } }
 </style>
+<div class="backgroundPanel"></div>
 """
 
 st.markdown(styl, unsafe_allow_html=True)
