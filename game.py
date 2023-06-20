@@ -16,9 +16,9 @@ styl = """
         bottom: 2rem;
         background-color: white;
         right:700  
-        z-index:4;
         left:500;
         border-radius: 36px; 
+        z-index:4;
     }
     .stButton{
         position: fixed;
@@ -119,9 +119,6 @@ if user_input :
     st.session_state["messages_game"].append(msg)
     st.session_state["回答内容_game"].append(msg)
     message(msg.content)
-
-
-
 
 
 
