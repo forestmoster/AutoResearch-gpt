@@ -32,9 +32,9 @@ styl = """
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 100px; /* 设置纯块的高度，根据需要进行调整 */
+        height: 20px; /* 设置纯块的高度，根据需要进行调整 */
         background-color: white; /* 设置纯块的背景颜色为白色 */
-        z-index: -1; /* 将纯块放置在其他元素的下方 */
+        z-index: 1; /* 将纯块放置在其他元素的下方 */
     }   
     @media screen and (max-width: 1000px) {
         .stTextInput {
