@@ -16,7 +16,7 @@ styl = """
         bottom: 2rem;
         background-color: white;
         right:700  
-        z-index:3;
+        z-index:4;
         left:500;
         border-radius: 36px; 
     }
