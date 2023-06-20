@@ -29,7 +29,7 @@ styl = """
     }
     .backgroundPanel {    
         position: fixed;
-        bottom: 3rem;
+        bottom: 0;
         top: 0;
         left: 0;
         width: 100%;
