@@ -60,7 +60,7 @@ styl = """
         document.body.appendChild(backgroundPanel);
     });
 </script>
-
+<div class="backgroundPanel"></div>
 """
 
 st.markdown(styl, unsafe_allow_html=True)
