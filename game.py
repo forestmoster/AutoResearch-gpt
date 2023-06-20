@@ -30,12 +30,13 @@ styl = """
     @media screen and (max-width: 1000px) {
         .stTextInput {
             width: 70%;
+            bottom: 2rem;
         }
         
         .stButton {
             left:10%;
     
-            bottom:4rem;
+            bottom:0rem;
             
             } }
 
