@@ -42,7 +42,7 @@ styl = """
             width: 100%;       
             bottom:0rem; 
             z-index:3; 
-            height: 2.1rem; /* 设置输入框在移动设备上的高度 */
+            height: 13rem; /* 设置输入框在移动设备上的高度 */
         }          
         } 
 
