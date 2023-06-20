@@ -27,8 +27,9 @@ styl = """
         right:500;
         z-index:3;
     }
-    .backgroundPanel {
+    .backgroundPanel {    
         position: fixed;
+        bottom: 3rem;
         top: 0;
         left: 0;
         width: 100%;
