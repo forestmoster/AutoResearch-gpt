@@ -4,10 +4,10 @@ import split
 from docx import Document
 import pinecrone_chunk
 
-add_selectbox = st.sidebar.selectbox(
-    "How would you like to be contacted?",
-    ("Email", "Home phone", "Mobile phone")
-)
+# add_selectbox = st.sidebar.selectbox(
+#     "How would you like to be contacted?",
+#     ("Email", "Home phone", "Mobile phone")
+# )
 
 
 uploaded_files = st.file_uploader("选择一个纯文本docx文件", accept_multiple_files=True)
