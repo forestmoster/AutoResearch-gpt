@@ -16,7 +16,7 @@ for uploaded_file in uploaded_files:
         doc = Document(uploaded_file)
         # 对文档进行处理，例如读取内容、修改样式等
         # 例如，打印文档中的段落内容
-        pinecrone_chunk.chunk(20, 600, 50,uploaded_file=uploaded_file)
+        pinecrone_chunk.chunk(20, 600, 50,uploaded_file=doc)
         st.write('上传成功')
 
 
