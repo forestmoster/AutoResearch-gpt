@@ -106,7 +106,48 @@ def split_strings_from_subsection_word(
     # otherwise, split in half and recurse
     else:
        file_name,titles, text = subsection
-       for delimiter in ["\n\n", "\n", ". "]:
+       for delimiter in ["\n\n", "\n", "."]:
+            left, right = halved_by_delimiter(str(text[0]), delimiter=delimiter)
+            if left == "" or right == "":
+                # if either half is empty, retry with a more fine-grained delimiter
+                continue
+            else:
+                # recurse on each half
+                results = []
+                for half in [left, right]:
+                    half_subsection = (file_name,titles, [half])
+                    half_strings = split_strings_from_subsection_word(
+                        half_subsection,
+                        max_tokens=max_tokens,
+                        model=model,
+                        max_recursion=max_recursion - 1,
+                    )
+                    results.extend(half_strings)
+                return results
+    return [truncated_string(string, model=model, max_tokens=max_tokens)]
+def split_strings_from_subsection_pdf(
+    subsection: tuple[str, str,list[str]],
+    max_tokens: int = 1000,
+    model: str = "gpt-3.5-turbo",
+    max_recursion: int = 5,
+) -> list[str]:
+    """
+    Split a subsection into a list of subsections, each with no more than max_tokens.
+    Each subsection is a tuple of parent titles [H1, H2, ...] and text (str).
+    """
+    file_name,titles,text = subsection
+    string = "\n".join([file_name]+[titles] + text)
+    num_tokens_in_string = num_tokens(string)
+    # if length is fine, return string
+    if num_tokens_in_string <= max_tokens:
+        return [string]
+    # if recursion hasn't found a split after X iterations, just truncate
+    elif max_recursion == 0:
+        return [truncated_string(string, model=model, max_tokens=max_tokens)]
+    # otherwise, split in half and recurse
+    else:
+       file_name,titles, text = subsection
+       for delimiter in ["\n\n", "。"]:
             left, right = halved_by_delimiter(str(text[0]), delimiter=delimiter)
             if left == "" or right == "":
                 # if either half is empty, retry with a more fine-grained delimiter

@@ -43,4 +43,3 @@ def pinecrone_search(query,model="text-embedding-ada-002",top_k: int = 80):
         relatednesses.append(match['score'])
     return strings,relatednesses
 
-
