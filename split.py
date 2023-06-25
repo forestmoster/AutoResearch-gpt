@@ -164,6 +164,5 @@ def split_strings_from_subsection_pdf(
                         max_recursion=max_recursion - 1,
                     )
                     results.extend(half_strings)
-                    print(results)
                 return results
     return [truncated_string(string, model=model, max_tokens=max_tokens)]
