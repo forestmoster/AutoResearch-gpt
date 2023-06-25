@@ -78,11 +78,11 @@ def chunk_docx (title_long:int,MAX_TOKENS:int,BATCH_SIZE:int,uploaded_file:str):
         elif len(paragraph) > title_long:
             tags=jieba.analyse.extract_tags(paragraph,topK=5)
             text.append(paragraph)
-            text=tags+text
             text_count.append(paragraph)
         if len(text) > 0:
             titles_strings= " ".join(titles)
-            strings.append((file_name,titles_strings, text))
+            tags_strings = " ".join(tags)
+            strings.append((file_name,titles_strings, tags_strings, text))
             text = []
 
     # # 对文件进行切分
@@ -177,23 +177,21 @@ def chunk_pdf(title_long: int, MAX_TOKENS: int, BATCH_SIZE: int, uploaded_file: 
                 text_count = []
                 titles = []
             if 0 < len(paragraph) <= title_long:
-                titles = paragraph
+                titles = titles.append(paragraph)
             elif len(paragraph) > title_long:
                 tags = jieba.analyse.extract_tags(paragraph, topK=10)
-                text = tags + text
                 text.append(paragraph)
                 text_count.append(paragraph)
             if len(text) > 0:
                 titles_strings = " ".join(titles)
-                strings.append((file_name, titles_strings, text))
+                tags_strings = " ".join(tags)
+                strings.append((file_name, titles_strings,tags_strings,text))
                 text = []
         wikipedia_strings = []
         MAX_TOKENS = MAX_TOKENS
         for section in strings:
             wikipedia_strings.extend(split.split_strings_from_subsection_pdf(section, max_tokens=MAX_TOKENS))
         st.write(f"正在上传....{len(strings)}  sections split into {len(wikipedia_strings)} strings.")
-
-
 
         from tqdm.auto import tqdm  # this is our progress bar
         if count==1:

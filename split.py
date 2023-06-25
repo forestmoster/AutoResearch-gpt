@@ -85,7 +85,7 @@ def split_strings_from_subsection(
     return [truncated_string(string, model=model, max_tokens=max_tokens)]
 
 def split_strings_from_subsection_word(
-    subsection: tuple[str, str,list[str]],
+    subsection: tuple[str, str,str,list[str]],
     max_tokens: int = 1000,
     model: str = "gpt-3.5-turbo",
     max_recursion: int = 5,
@@ -94,8 +94,8 @@ def split_strings_from_subsection_word(
     Split a subsection into a list of subsections, each with no more than max_tokens.
     Each subsection is a tuple of parent titles [H1, H2, ...] and text (str).
     """
-    file_name,titles,text = subsection
-    string = "\n\n".join([file_name]+[titles] + text)
+    file_name,titles,tags,text = subsection
+    string = "\n\n".join([file_name]+[titles]+[tags] + text)
     num_tokens_in_string = num_tokens(string)
     # if length is fine, return string
     if num_tokens_in_string <= max_tokens:
@@ -105,7 +105,7 @@ def split_strings_from_subsection_word(
         return [truncated_string(string, model=model, max_tokens=max_tokens)]
     # otherwise, split in half and recurse
     else:
-       file_name,titles, text = subsection
+       file_name,titles,tags,text= subsection
        for delimiter in ["\n\n", "\n", "."]:
             left, right = halved_by_delimiter(str(text[0]), delimiter=delimiter)
             if left == "" or right == "":
@@ -115,7 +115,7 @@ def split_strings_from_subsection_word(
                 # recurse on each half
                 results = []
                 for half in [left, right]:
-                    half_subsection = (file_name,titles, [half])
+                    half_subsection = (file_name,titles,tags,[half])
                     half_strings = split_strings_from_subsection_word(
                         half_subsection,
                         max_tokens=max_tokens,
@@ -126,7 +126,7 @@ def split_strings_from_subsection_word(
                 return results
     return [truncated_string(string, model=model, max_tokens=max_tokens)]
 def split_strings_from_subsection_pdf(
-    subsection: tuple[str, str,list[str]],
+    subsection: tuple[str, str,str,list[str]],
     max_tokens: int = 1000,
     model: str = "gpt-3.5-turbo",
     max_recursion: int = 5,
@@ -135,8 +135,8 @@ def split_strings_from_subsection_pdf(
     Split a subsection into a list of subsections, each with no more than max_tokens.
     Each subsection is a tuple of parent titles [H1, H2, ...] and text (str).
     """
-    file_name,titles,text = subsection
-    string = "\n".join([file_name]+[titles] + text)
+    file_name,titles,tags,text = subsection
+    string = "\n".join([file_name]+[titles]+[tags]+ text)
     num_tokens_in_string = num_tokens(string)
     # if length is fine, return string
     if num_tokens_in_string <= max_tokens:
@@ -146,7 +146,7 @@ def split_strings_from_subsection_pdf(
         return [truncated_string(string, model=model, max_tokens=max_tokens)]
     # otherwise, split in half and recurse
     else:
-       file_name,titles, text = subsection
+       file_name,titles,tags,text= subsection
        for delimiter in ["\n\n", "。"]:
             left, right = halved_by_delimiter(str(text[0]), delimiter=delimiter)
             if left == "" or right == "":
@@ -156,13 +156,14 @@ def split_strings_from_subsection_pdf(
                 # recurse on each half
                 results = []
                 for half in [left, right]:
-                    half_subsection = (file_name,titles, [half])
-                    half_strings = split_strings_from_subsection_word(
+                    half_subsection = (file_name,titles,tags,[half])
+                    half_strings = split_strings_from_subsection_pdf(
                         half_subsection,
                         max_tokens=max_tokens,
                         model=model,
                         max_recursion=max_recursion - 1,
                     )
                     results.extend(half_strings)
+                    print(results)
                 return results
     return [truncated_string(string, model=model, max_tokens=max_tokens)]
