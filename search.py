@@ -25,7 +25,7 @@ def strings_ranked_by_relatedness(
 
 
 
-def pinecrone_search(query,model="text-embedding-ada-002",top_k: int = 80):
+def pinecrone_search(query,model="text-embedding-ada-002",top_k: int = 45):
     # initialize connection to pinecone (get API key at app.pinecone.io)
     pinecone.init(
         api_key="b0e7c072-995c-4406-8c41-12238d626882",
@@ -42,4 +42,5 @@ def pinecrone_search(query,model="text-embedding-ada-002",top_k: int = 80):
         strings.append(match['metadata']['text'])
         relatednesses.append(match['score'])
     return strings,relatednesses
+
 
