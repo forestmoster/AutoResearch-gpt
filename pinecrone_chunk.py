@@ -122,7 +122,6 @@ def chunk_docx (title_long:int,MAX_TOKENS:int,BATCH_SIZE:int,uploaded_file:str):
         # prep metadata and upsert batch
         meta = [{'text': line} for line in lines_batch]
         to_upsert = zip(ids_batch, embeds, meta)
-        st.write(ids_batch, embeds, meta)
         # upsert to Pinecone
         index.upsert(vectors=to_upsert)
 
@@ -214,7 +213,6 @@ def chunk_pdf(title_long: int, MAX_TOKENS: int, BATCH_SIZE: int, uploaded_file: 
             # prep metadata and upsert batch
             meta = [{'text': line} for line in lines_batch]
             to_upsert = zip(ids_batch, embeds, meta)
-            st.write(ids_batch, embeds, meta)
             # upsert to Pinecone
             index.upsert(vectors=to_upsert)
             last_uploaded_id=current_ids+len(ids_batch)
