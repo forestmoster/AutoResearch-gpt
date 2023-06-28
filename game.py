@@ -105,7 +105,7 @@ if user_input :
     message(user_input, is_user=True)
     response = openai.ChatCompletion.create(model="gpt-3.5-turbo",
                                             messages= st.session_state["回答内容_game"],
-                                            temperature=0.5,top_p=1.0,)
+                                            temperature=0.5,)
     msg = response.choices[0].message
     st.session_state["messages_game"].append(msg)
     st.session_state["回答内容_game"].append(msg)
@@ -116,21 +116,15 @@ if user_input :
     short_state_num=len(st.session_state["回答内容_game"])
     start_round = int(short_state_num*1/4)
     end_round = int(short_state_num*4/5)
+    st.write(st.session_state["回答内容_game"])
     for i in range(short_state_num):
         conversation_string += st.session_state["回答内容_game"][i]["content"] + "\n"
     # 调用计算文字的函数
     conversation_string_num=num_text(conversation_string)
     if conversation_string_num >2300 or st.session_state['回答次数'] > 15:
-        response = openai.ChatCompletion.create(model="gpt-3.5-turbo",
-                                                messages=[{"role": "system",
-                                                           "content": '请总结归纳以下的对话，将字数控制在200字以内'},
-                                                          {"role": "user", "content": conversation_string}]
-                                                )
-        summary = response.choices[0].message["content"]
-        st.session_state["回答内容_game"][start_round : end_round] = [
-            {"role": "assistant", "content": summary}
-        ]
+        del st.session_state["回答内容_game"][start_round : end_round]
         st.session_state['回答次数'] = 1
+        st.write(st.session_state["回答内容_game"])
 
 
 
