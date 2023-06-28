@@ -116,7 +116,7 @@ if user_input :
     short_state_num=len(st.session_state["回答内容_game"])
     start_round = int(short_state_num*1/4)
     end_round = int(short_state_num*4/5)
-    st.write(st.session_state["回答内容_game"])
+
     for i in range(short_state_num):
         conversation_string += st.session_state["回答内容_game"][i]["content"] + "\n"
     # 调用计算文字的函数
@@ -124,7 +124,7 @@ if user_input :
     if conversation_string_num >2300 or st.session_state['回答次数'] > 15:
         del st.session_state["回答内容_game"][start_round : end_round]
         st.session_state['回答次数'] = 1
-        st.write(st.session_state["回答内容_game"])
+
 
 
 
