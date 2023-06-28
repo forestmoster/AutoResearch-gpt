@@ -120,9 +120,6 @@ if user_input :
         conversation_string += st.session_state["回答内容_game"][i]["content"] + "\n"
     # 调用计算文字的函数
     conversation_string_num=num_text(conversation_string)
-    st.write(conversation_string_num)
-
-
     if conversation_string_num >2300 or st.session_state['回答次数'] > 15:
         response = openai.ChatCompletion.create(model="gpt-3.5-turbo",
                                                 messages=[{"role": "system",
@@ -134,7 +131,7 @@ if user_input :
             {"role": "assistant", "content": summary}
         ]
         st.session_state['回答次数'] = 1
-        st.write(st.session_state["回答内容_game"])
+
 
 
 
