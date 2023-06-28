@@ -58,7 +58,6 @@ if user_input :
     msg = response.choices[0].message
     st.session_state.messages.append(msg)
     st.session_state['回答内容'].append(msg)
-    st.write(st.session_state['回答内容'])
     st.session_state['回答次数'] = st.session_state['回答次数'] + 1
     # 修改 st.session_state['回答内容'] 中的最后一条消息的内容
     st.session_state['回答内容'][-2]["content"] = user_input
@@ -74,7 +73,6 @@ if user_input :
         conversation_string += st.session_state["回答内容"][i]["content"] + "\n"
     # 调用计算文字的函数
     conversation_string_num = len(conversation_string)
-    st.write( conversation_string_num)
     if conversation_string_num > 2000 or st.session_state['回答次数'] > 6:
         del st.session_state["回答内容"][start_round: end_round]
         st.session_state['回答次数'] = 1
