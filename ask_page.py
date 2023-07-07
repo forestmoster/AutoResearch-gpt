@@ -73,3 +73,22 @@ def ask_robot(
     )
     response_message = response["choices"][0]["message"]
     return response_message
+
+def query_message_langchain(
+    query: str,
+    token_budget: int,
+    model="text-embedding-ada-002",
+) -> str:
+    """Return a message for GPT, with relevant source texts pulled from a dataframe."""
+    strings,relatednesses = search.pinecrone_search(query,model=model,)
+    message = ''
+    for string in strings:
+        next_article = f'"\n{string}\n"'
+        if (
+            num_tokens(next_article , model=model)
+            > token_budget
+        ):
+            break
+        else:
+            message += next_article
+    return  message
