@@ -23,7 +23,7 @@ styl = """
     
     .stButton{
         position: fixed;
-        bottom: 8rem;
+        bottom: 1rem;
         left:500; 
         right:500;
         z-index:999;
