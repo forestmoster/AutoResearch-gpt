@@ -59,8 +59,10 @@ if '回答次数_web' not in st.session_state:
 if st.button('重新开始一个回答'):
     del st.session_state["回答内容_web"]
     del st.session_state["messages_web"]
+    del st.session_state["回答次数_web"]
     st.session_state["回答内容_web"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
     st.session_state["messages_web"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
+    st.session_state['回答次数_web'] = 1
     # 清空文本输入框的内容
     user_input = ""
 
@@ -233,7 +235,7 @@ if prompt := st.chat_input(placeholder="在这打字，回答问题"):
         conversation_string += st.session_state["回答内容_web"][i]["content"] + "\n"
     # 调用计算文字的函数
     conversation_string_num = len(conversation_string)
-    if conversation_string_num > 2000 or st.session_state['回答次数'] > 3:
+    if conversation_string_num > 2000 or st.session_state['回答次数_web'] > 3:
         del st.session_state["回答内容_web"][start_round: end_round]
         st.session_state['回答次数_web'] = 1
 
