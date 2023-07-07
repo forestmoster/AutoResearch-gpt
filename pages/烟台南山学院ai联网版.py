@@ -76,7 +76,13 @@ def search_database(query: str) -> str:
     query_message =ask_page.query_message_langchain(query=query, token_budget=2000,)
     return query_message
 
-search = DuckDuckGoSearchRun()
+search=DuckDuckGoSearchRun()
+
+def search_web(query: str) -> str:
+    # query_message = search(f'site:nanshan.edu.cn {query}')
+    query_message = search(query)
+    return query_message
+
 
 
 
@@ -88,14 +94,14 @@ tools = [
     ),
     Tool(
         name="search_web",
-        func=search.run,
+        func=search_web,
         description="当问题中没有提到南山学院的规章制度，使用这个工具",
     ),
 ]
 
 
 # Set up the base template
-template = """严格按照下面的格式回答问题，结合材料得出答案，最终答案字数要多，不能过滤，不能总结。
+template = """严格按照下面的格式回答问题，最终答案字数要多，一定不能过滤，不能总结。
 
 你可以使用以下工具:
 
@@ -109,7 +115,7 @@ template = """严格按照下面的格式回答问题，结合材料得出答案
 操作输入:(输入的关键词)
 观察:(操作的结果)
 ...（思考/操作/操作输入/观察可以重复N次）
-思考:(我找到答案了)
+思考:(我找到答案了or我没有找到答案)
 最终答案:(原始输入问题的最终答案)
 
 
@@ -181,7 +187,7 @@ class CustomOutputParser(AgentOutputParser):
         action_input = match.group(2)
         # Return the action and action input
         return [AgentAction(
-            tool=action, tool_input=action_input.strip(" ").strip('"'), log=llm_output
+            tool='search_web', tool_input=action_input.strip(" ").strip('"'), log=llm_output
         )]
 
 
@@ -189,7 +195,7 @@ output_parser = CustomOutputParser()
 #
 from langchain.chat_models import ChatOpenAI
 #
-llm = ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key=os.getenv('OPENAI_API_KEY'), streaming=True,temperature=0)
+llm = ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key=os.getenv('OPENAI_API_KEY'), streaming=True,temperature=0.2)
 # # # LLM chain consisting of the LLM and a prompt
 llm_chain = LLMChain(llm=llm, prompt=prompt)
 tool_names = [tool.name for tool in tools]
