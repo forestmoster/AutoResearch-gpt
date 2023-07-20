@@ -143,7 +143,7 @@ template = """结合下面的文章来回答问题，使用中文回答。
 """
 
 
-llm = ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key=os.getenv('OPENAI_API_KEY'), streaming=True,temperature=0.2)
+llm = ChatOpenAI(model_name="gpt-3.5-turbo-16k", openai_api_key=os.getenv('OPENAI_API_KEY'), streaming=True,temperature=0.2)
 
 
 
@@ -269,7 +269,7 @@ if prompt := st.chat_input(placeholder="在这打字，回答问题"):
         conversation_string += st.session_state["回答内容_web"][i]["content"] + "\n"
     # 调用计算文字的函数
     conversation_string_num = len(conversation_string)
-    if conversation_string_num > 1000 or st.session_state['回答次数_web'] > 3:
+    if conversation_string_num > 2000 or st.session_state['回答次数_web'] > 4:
         del st.session_state["回答内容_web"][start_round: end_round]
         st.session_state['回答次数_web'] = 1
 #
