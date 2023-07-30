@@ -112,6 +112,7 @@ starlette==0.27.0
 streamlit==1.24.0
 streamlit-chat==0.0.2.2
 sympy==1.12
+sqlit==3.40.1
 tenacity==8.2.2
 tiktoken==0.4.0
 tokenizers==0.13.3
