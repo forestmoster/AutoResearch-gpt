@@ -232,6 +232,8 @@ def search_research_articles(query:str):
     # if len(st.session_state["messages_wikipedia_strings"]) < 1:
         st.write('正在下载论文，这个过程可能持续几分钟，请耐心等待。。。。')
         results=search_research_title_url_abstract(query)
+        if results is None:
+            return '没有找到论文，你可以去其他网址下载pdf后，然后进行分析'
         strings = []
         for result in results:
             url=result['url']['url']
