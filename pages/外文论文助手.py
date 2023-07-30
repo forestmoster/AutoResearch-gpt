@@ -207,6 +207,7 @@ def search_research_title_url_abstract(q:str,key:str=api_key,entity_type: str='w
     }
     response = requests.post(url, data=json.dumps(search_params), headers=headers)
     results=response.json()
+    st.write(results)
     # scrollId={results['scrollId']}
 
     if results is not None and response.status_code == 200:
@@ -222,7 +223,7 @@ def search_research_title_url_abstract(q:str,key:str=api_key,entity_type: str='w
                 out_results.append(s)
         return out_results[:limit]
     else:
-        return [{'year':'无', 'authors':'无', 'title':'无', 'url':'无', 'abstract':'无'}]
+        return [{'year':'无', 'authors':'无', 'title':'无', 'url': {'url':'无'}, 'abstract':'无'}]
 
 def search_research_articles(query:str):
     # if len(st.session_state["messages_wikipedia_strings"]) < 1:
