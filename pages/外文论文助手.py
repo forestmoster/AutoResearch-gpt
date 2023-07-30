@@ -228,60 +228,61 @@ def search_research_articles(query:str):
     # if len(st.session_state["messages_wikipedia_strings"]) < 1:
         st.write('正在下载论文，这个过程可能持续几分钟，请耐心等待。。。。')
         results=search_research_title_url_abstract(query)
-        strings = []
-        for result in results:
-            url=result['url']['url']
-            title=result['title']
-            abstract=result['abstract']
-            authors=result['authors']
-            year=result['year']
-            pdf_content = download_pdf(url)
-            if pdf_content:
-                # 创建PDF阅读器对象
-                try:
-                    pdf_reader = read_pdf(pdf_content)
-                except :
+        if results is not None:
+            strings = []
+            for result in results:
+                url=result['url']['url']
+                title=result['title']
+                abstract=result['abstract']
+                authors=result['authors']
+                year=result['year']
+                pdf_content = download_pdf(url)
+                if pdf_content:
+                    # 创建PDF阅读器对象
+                    try:
+                        pdf_reader = read_pdf(pdf_content)
+                    except :
+                        continue
+                    # 逐页读取文本并存储在一个字符串中
+                    all_text = ""
+                    try:
+                        for page in pdf_reader.pages:
+                                all_text += page.extract_text()
+                    except UnicodeDecodeError:
+                        # 在解码错误时跳过该页的文本提取
+                        continue
+                    if abstract is None:
+                        abstract = ''  # 将abstract的值更改为空字符串
+                    tags = jieba.analyse.extract_tags(abstract, topK=10)
+                    title = f'year:{year}，title:{title}，authors:{authors}'
+                    url=f'url:{url}'
+                    tags=f'abstract keyword:{tags}'
+                    all_text= all_text.replace('...', '')
+                    all_text = all_text.replace('..', '')
+                    all_text = ' '.join(all_text.split())
+                    text=[]
+                    text.append(all_text)
+                    strings.append((title,url, tags, text))
+                    st.caption((url,))
+                    st.session_state["messages_wikipedia_缓存关键词"].extend((title, url, tags))
+                # 打印PDF文档的所有内容
+                else:
                     continue
-                # 逐页读取文本并存储在一个字符串中
-                all_text = ""
-                try:
-                    for page in pdf_reader.pages:
-                            all_text += page.extract_text()
-                except UnicodeDecodeError:
-                    # 在解码错误时跳过该页的文本提取
-                    continue
-                if abstract is None:
-                    abstract = ''  # 将abstract的值更改为空字符串
-                tags = jieba.analyse.extract_tags(abstract, topK=10)
-                title = f'year:{year}，title:{title}，authors:{authors}'
-                url=f'url:{url}'
-                tags=f'abstract keyword:{tags}'
-                all_text= all_text.replace('...', '')
-                all_text = all_text.replace('..', '')
-                all_text = ' '.join(all_text.split())
-                text=[]
-                text.append(all_text)
-                strings.append((title,url, tags, text))
-                st.caption((url,))
-                st.session_state["messages_wikipedia_缓存关键词"].extend((title, url, tags))
-            # 打印PDF文档的所有内容
-            else:
-                continue
-        wikipedia_strings = []
-        MAX_TOKENS = 1000
-        for section in strings:
-            wikipedia_strings.extend(split.split_strings_from_subsection_pdf(section, max_tokens=MAX_TOKENS))
-        st.session_state["messages_wikipedia_strings"].extend(wikipedia_strings)
-        embeddings = OpenAIEmbeddings()
-        docsearch = Chroma.from_texts(st.session_state["messages_wikipedia_strings"], embeddings)
-        docs = docsearch.similarity_search(query, k=10)
-        return docs
-    # if len(st.session_state["messages_wikipedia_strings"]) > 1:
-    #     embeddings = OpenAIEmbeddings()
-    #     docsearch = Chroma.from_texts(st.session_state["messages_wikipedia_strings"], embeddings)
-    #     docs = docsearch.similarity_search(st.session_state["messages_prompt"][-1], k=10)
-    #     st.write(st.session_state["messages_prompt"][-1])
-    #     return docs
+            wikipedia_strings = []
+            MAX_TOKENS = 1000
+            for section in strings:
+                wikipedia_strings.extend(split.split_strings_from_subsection_pdf(section, max_tokens=MAX_TOKENS))
+            st.session_state["messages_wikipedia_strings"].extend(wikipedia_strings)
+            embeddings = OpenAIEmbeddings()
+            docsearch = Chroma.from_texts(st.session_state["messages_wikipedia_strings"], embeddings)
+            docs = docsearch.similarity_search(query, k=10)
+            return docs
+        # if len(st.session_state["messages_wikipedia_strings"]) > 1:
+        #     embeddings = OpenAIEmbeddings()
+        #     docsearch = Chroma.from_texts(st.session_state["messages_wikipedia_strings"], embeddings)
+        #     docs = docsearch.similarity_search(st.session_state["messages_prompt"][-1], k=10)
+        #     st.write(st.session_state["messages_prompt"][-1])
+        #     return docs
 
 
 def search_Cache(query:str):
