@@ -2,13 +2,18 @@ import ast
 from typing import List
 import re
 import jieba.analyse
+import openai
+import pandas as pd
 from langchain import LLMChain, OpenAI, PromptTemplate, text_splitter
 from langchain.agents import AgentOutputParser, LLMSingleActionAgent, AgentExecutor, initialize_agent, AgentType
 from langchain.callbacks import StreamlitCallbackHandler
+from langchain.chains import RetrievalQA
 from langchain.chat_models import ChatOpenAI
+from langchain.document_loaders import TextLoader
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.prompts import StringPromptTemplate
 from langchain.schema import AgentFinish, AgentAction
+from langchain.text_splitter import CharacterTextSplitter
 from langchain.tools import Tool
 import streamlit as st
 from langchain.vectorstores import Chroma
@@ -20,7 +25,9 @@ import requests
 import json
 api_key='8j9mqPr37oHsORDKJTWyeYMdBGgA5cZz'
 
-
+def on_file_change(file):
+    # 在这里处理文件上传后的操作
+    return f'文件名: {file.name},文件大小: {file.size} bytes'
 styl = """
 <style>
 
@@ -49,8 +56,10 @@ styl = """
 st.markdown(styl, unsafe_allow_html=True)
 
 st.title("💬 外文文献助手")
-st.caption('你可以查询和下载相关领域的外文文献，并撰写论文综述')
-
+st.caption('你可以联网查询和下载相关领域的外文文献，并撰写论文综述。你也可以上传一个pdf,对其进行分析')
+uploaded_file = st.file_uploader("选择一个纯文本docx文件或者pdf文件",accept_multiple_files=False,label_visibility="hidden")
+if uploaded_file is None:
+    st.cache_resource.clear()
 if "messages_article" not in st.session_state:
     st.session_state["messages_article"] = [{"role": "assistant", "content": "你好，同学，你想问什么？"}]
 if "回答内容_article" not in st.session_state:
@@ -121,6 +130,55 @@ def pdf_text(url:str):
         return all_text
     else:
         return("Failed to download the PDF.")
+# def search_doi(dois:str,key:str=api_key):
+#     dois = ast.literal_eval(dois)
+#     down_url=[]
+#     for doi in dois:
+#         search_params = {
+#                           "doi": doi
+#                             }
+#         url = f'https://api.core.ac.uk/v3/discover'
+#         headers = {
+#             'Content-Type': 'application/json',
+#             'Authorization': 'Bearer {}'.format(key)  # 替换为您的API密钥
+#         }
+#         response = requests.post(url, data=json.dumps(search_params), headers=headers)
+#         results = response.json()
+#         if response.status_code == 200:
+#             down_url.append(results['fullTextLink'])
+#         else:
+#             continue
+#     return down_url
+@st.cache_resource
+def read_upload_pdf(uploaded_file):
+    strings = []
+    try:
+        pdf_reader = PyPDF2.PdfReader(uploaded_file)
+    except:
+        raise ValueError("不支持的文件类型")
+    all_text = ""
+    for page in pdf_reader.pages:
+        all_text += page.extract_text()
+    title = uploaded_file.name
+    url = ''
+    tags = ''
+    all_text = all_text.replace('...', '')
+    all_text = all_text.replace('..', '')
+    all_text = ' '.join(all_text.split())
+    text = []
+    text.append(all_text)
+    strings.append((title, url, tags, text))
+    wikipedia_strings = []
+    MAX_TOKENS = 4000
+    for section in strings:
+        wikipedia_strings.extend(split.split_strings_from_subsection_pdf(section, max_tokens=MAX_TOKENS))
+    embeddings_model = OpenAIEmbeddings(model="text-embedding-ada-002")
+    docsearch = Chroma.from_texts(wikipedia_strings, embeddings_model, collection_name="state-of-union")
+    return docsearch
+def search_read_upload_pdf(query:str):
+    docsearch=read_upload_pdf(uploaded_file)
+    answer=docsearch.similarity_search(query, k=3)
+    return answer
 
 def search_research_title_url_abstract(q:str,key:str=api_key,entity_type: str='works',limit:int=10):
     search_params = {
@@ -310,7 +368,18 @@ tools = [
         func=search_Cache,
         description='''用这个工具的前提是判断提问是否和缓存内容有关，用这个工具可以直接调取缓存中的数据，而不用下载论文'''
     ),
+    # Tool(
+    #     name="search_doi",
+    #     func=search_doi,
+    #     description='''当知道论文的doi时，用这个工具可以搜索到论文的url,If you use this tool,please use the action input format and the input must be list:['xxxxxxxx',......]:'''
+    # ),
+    Tool(
+        name="search_read_upload_pdf",
+        func=search_read_upload_pdf,
+        description='''当您需要回答关于文件的问题时很有用。输入应为完整的问题'''
+    ),
 ]
+
 
 
 template = """
@@ -338,7 +407,40 @@ class CustomPromptTemplate(StringPromptTemplate):
         # background_infomation=[]
         # print(background_infomation)
         # 没有互联网查询信息
-        if len(intermediate_steps)== 0:
+        if uploaded_file is not None and len(intermediate_steps)== 2:
+            thoughts = ""
+            for action, observation in intermediate_steps:
+                # thoughts += action.log
+                thoughts += f"\n背景信息:{observation}\n"
+            # Set the agent_scratchpad variable to that value
+            background_infomation = thoughts
+            # background_infomation += f"{observation}\n"
+            question_guide = "请结合这些背景信息回答我的问题，文章结尾需要有参考文献"
+            history = st.session_state["回答内容_article"]
+            answer_format = ''
+        elif uploaded_file is not None:
+            tools = "search_read_upload_pdf"
+            tool_names = "search_read_upload_pdf"
+            background_infomation = "\n"
+            question_guide = ""
+            history = st.session_state["回答内容_article"]
+            answer_format =f'''像一个海盗一样进行回答
+You can use the following tools:
+
+{tools}
+
+Please strictly follow the format below to answer:
+
+问题:(The question you need to answer)
+思考:(What you should consider doing)
+操作:one of [{tool_names}]
+操作输入:(The keywords you input should be English)
+观察:(操作的结果)
+... (这个 思考/操作/操作输入/观察 可以重复N次)
+思考: I now know the final answer
+最终答案: the final answer to the original input question
+'''
+        elif len(intermediate_steps)== 0:
             tools = "\n".join([f"{tool.name}: {tool.description}" for tool in self.tools])
             tool_names=",".join([tool.name for tool in self.tools])
             background_infomation="\n"
@@ -475,6 +577,11 @@ agent = LLMSingleActionAgent(
 agent_wzm = AgentExecutor.from_agent_and_tools(
         agent=agent, tools=tools, verbose=True
     )
+
+
+# if uploaded_file is not None and st.button('上传'):
+
+
 
 if prompt := st.chat_input(placeholder="在这打字，回答问题"):
     st.session_state['messages_article'].append({"role": "user", "content": prompt})
