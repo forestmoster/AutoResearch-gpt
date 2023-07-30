@@ -209,7 +209,7 @@ def search_research_title_url_abstract(q:str,key:str=api_key,entity_type: str='w
     results=response.json()
     # scrollId={results['scrollId']}
 
-    if response.status_code == 200:
+    if results is not None and response.status_code == 200:
         out_results=[]
         for result in results['results']:
             if result['links'][0]['type']=='download':
