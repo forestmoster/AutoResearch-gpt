@@ -609,5 +609,3 @@ if prompt := st.chat_input(placeholder="在这打字，进行提问"):
         st.session_state['回答次数_article'] = 1
     if len(st.session_state["messages_wikipedia_缓存关键词"])>50:
         st.write('数据库超缓存了！！！,请重修开始一个回答')
-
-st.write(st.session_state["回答内容_article"][-1]['content'])
