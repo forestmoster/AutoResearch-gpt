@@ -226,7 +226,6 @@ def search_research_title_url_abstract(q:str,key:str=api_key,entity_type: str='w
         out_results = []
         s={'year':'无', 'authors':'无', 'title':'无', 'url': {'url':'无'}, 'abstract':'无'}
         out_results.append(s)
-        st.write(results)
         return out_results
 
 def search_research_articles(query:str):
@@ -236,6 +235,7 @@ def search_research_articles(query:str):
         strings = []
         for result in results:
             url=result['url']['url']
+            st.write(results)
             title=result['title']
             abstract=result['abstract']
             authors=result['authors']
