@@ -1,7 +1,7 @@
 
 import sys
-
-sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
+__import__("pysqlite3")
+sys.modules["pysqlite3-binary"] = sys.modules.pop("pysqlite3")
 
 
 import ast
