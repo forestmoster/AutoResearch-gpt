@@ -583,7 +583,7 @@ agent_wzm = AgentExecutor.from_agent_and_tools(
 
 
 
-if prompt := st.chat_input(placeholder="在这打字，回答问题"):
+if prompt := st.chat_input(placeholder="在这打字，进行提问"):
     st.session_state['messages_article'].append({"role": "user", "content": prompt})
     st.session_state["回答内容_article"].append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
@@ -610,3 +610,4 @@ if prompt := st.chat_input(placeholder="在这打字，回答问题"):
     if len(st.session_state["messages_wikipedia_缓存关键词"])>50:
         st.write('数据库超缓存了！！！,请重修开始一个回答')
 
+st.write(st.session_state["回答内容_article"][-1]['content'])
