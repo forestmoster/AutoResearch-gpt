@@ -223,10 +223,10 @@ def search_research_title_url_abstract(q:str,key:str=api_key,entity_type: str='w
                 out_results.append(s)
         return out_results[:limit]
     else:
-        out_results = []
-        s={'year':'无', 'authors':'无', 'title':'无', 'url': {'url':'无'}, 'abstract':'无'}
-        out_results.append(s)
-        return out_results
+        # out_results = []
+        # s={'year':'无', 'authors':'无', 'title':'无', 'url': {'url':'无'}, 'abstract':'无'}
+        # out_results.append(s)
+        return None
 
 def search_research_articles(query:str):
     # if len(st.session_state["messages_wikipedia_strings"]) < 1:
@@ -235,7 +235,6 @@ def search_research_articles(query:str):
         strings = []
         for result in results:
             url=result['url']['url']
-            st.write(results)
             title=result['title']
             abstract=result['abstract']
             authors=result['authors']
