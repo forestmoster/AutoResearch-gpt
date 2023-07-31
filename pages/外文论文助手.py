@@ -1,7 +1,7 @@
 
-import sys
-__import__("pysqlite3")
-sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
+# import sys
+# __import__("pysqlite3")
+# sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
 
 
 import ast
@@ -104,8 +104,11 @@ for msg in st.session_state["messages_article"]:
 
 
 def download_pdf(url):
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+    }
     try:
-        response = requests.get(url)
+        response = requests.get(url,headers=headers)
         if response.status_code == 200:
             return response.content
         else:
@@ -136,25 +139,25 @@ def pdf_text(url:str):
         return all_text
     else:
         return("Failed to download the PDF.")
-# def search_doi(dois:str,key:str=api_key):
-#     dois = ast.literal_eval(dois)
-#     down_url=[]
-#     for doi in dois:
-#         search_params = {
-#                           "doi": doi
-#                             }
-#         url = f'https://api.core.ac.uk/v3/discover'
-#         headers = {
-#             'Content-Type': 'application/json',
-#             'Authorization': 'Bearer {}'.format(key)  # 替换为您的API密钥
-#         }
-#         response = requests.post(url, data=json.dumps(search_params), headers=headers)
-#         results = response.json()
-#         if response.status_code == 200:
-#             down_url.append(results['fullTextLink'])
-#         else:
-#             continue
-#     return down_url
+def search_doi(dois:str,key:str=api_key):
+    dois = ast.literal_eval(dois)
+    down_url=[]
+    for doi in dois:
+        search_params = {
+                          "doi": doi
+                            }
+        url = f'https://api.core.ac.uk/v3/discover'
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer {}'.format(key)  # 替换为您的API密钥
+        }
+        response = requests.post(url, data=json.dumps(search_params), headers=headers)
+        results = response.json()
+        if response.status_code == 200:
+            down_url.append(results['fullTextLink'])
+        else:
+            continue
+    return down_url
 @st.cache_resource
 def read_upload_pdf(uploaded_file):
     strings = []
@@ -223,9 +226,6 @@ def search_research_title_url_abstract(q:str,key:str=api_key,entity_type: str='w
                 out_results.append(s)
         return out_results[:limit]
     else:
-        # out_results = []
-        # s={'year':'无', 'authors':'无', 'title':'无', 'url': {'url':'无'}, 'abstract':'无'}
-        # out_results.append(s)
         return None
 
 def search_research_articles(query:str):
@@ -380,11 +380,11 @@ tools = [
         func=search_Cache,
         description='''用这个工具的前提是判断提问是否和缓存内容有关，用这个工具可以直接调取缓存中的数据，而不用下载论文'''
     ),
-    # Tool(
-    #     name="search_doi",
-    #     func=search_doi,
-    #     description='''当知道论文的doi时，用这个工具可以搜索到论文的url,If you use this tool,please use the action input format and the input must be list:['xxxxxxxx',......]:'''
-    # ),
+    Tool(
+        name="search_doi",
+        func=search_doi,
+        description='''当知道论文的doi时，用这个工具可以搜索到论文的url,If you use this tool,please use the action input format and the input must be list:['xxxxxxxx',......]:'''
+    ),
     Tool(
         name="search_read_upload_pdf",
         func=search_read_upload_pdf,
