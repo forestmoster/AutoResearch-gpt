@@ -664,7 +664,8 @@ if prompt := st.chat_input(placeholder="在这打字，进行提问"):
             agent_wzm = csv_agent(llm=ChatOpenAI(temperature=0, model="gpt-3.5-turbo"), uploaded_file=uploaded_file)
             response_orgin = agent_wzm(f'''question:{prompt},
             history:{st.session_state['回答内容_article']},'''
-                                     f"Whenever you're generating or modify a plot,you must display it use Streamlit. all plot should have a clear title and axis labels. and make sure to save the image to a temporary directory first. You can use the following command:'plt.savefig(./tmp/{uploaded_file.name}.png)'. Ensure you have already imported Streamlit with 'import streamlit as st' at the beginning of your code. After saving the image, you can display it on your Streamlit app using: 'st.image(./tmp/{uploaded_file.name}.png)'. After it's been displayed,  You must delete the image using: 'os.remove(./tmp/{uploaded_file.name}.png)'."
+                                     f"Whenever you're generating or modify a plot,you must display it on Streamlit.First,you should save the image to a temporary directory,You can use the following command:'plt.savefig(./tmp/{uploaded_file.name}.png)'.SECOND ensure you have already imported Streamlit with 'import streamlit as st' at the beginning of your code. THIRD after saving the image, you can display it on your Streamlit app using: 'st.image(./tmp/{uploaded_file.name}.png)'. After it's been displayed,  You must delete the image using: 'os.remove(./tmp/{uploaded_file.name}.png)'."
+                                     f"All plot should have a clear title and axis labels."
                                      f"you must use Action: python_repl_ast.",callbacks=[st_cb])
             for observersion in response_orgin["intermediate_steps"]:
                 try:
