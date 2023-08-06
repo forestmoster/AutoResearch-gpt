@@ -5,6 +5,7 @@
 
 
 import ast
+import sys
 from typing import List
 import re
 import jieba.analyse
@@ -12,15 +13,17 @@ import openai
 import pandas as pd
 from langchain import LLMChain, OpenAI, PromptTemplate, text_splitter
 from langchain.agents import AgentOutputParser, LLMSingleActionAgent, AgentExecutor, initialize_agent, AgentType
+from langchain.agents.agent_toolkits import create_python_agent
 from langchain.callbacks import StreamlitCallbackHandler
+from langchain.callbacks.tracers import langchain
 from langchain.chains import RetrievalQA
 from langchain.chat_models import ChatOpenAI
 from langchain.document_loaders import TextLoader
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.prompts import StringPromptTemplate
-from langchain.schema import AgentFinish, AgentAction
+from langchain.schema import AgentFinish, AgentAction, BaseLanguageModel
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.tools import Tool
+from langchain.tools import Tool, PythonREPLTool
 import streamlit as st
 from langchain.vectorstores import Chroma
 import PyPDF2
@@ -30,6 +33,10 @@ import split
 import requests
 import json
 api_key='8j9mqPr37oHsORDKJTWyeYMdBGgA5cZz'
+import os
+
+def list_directory_contents(directory_path):
+    return os.listdir(directory_path)
 
 def on_file_change(file):
     # 在这里处理文件上传后的操作
@@ -60,9 +67,9 @@ styl = """
 """
 
 st.markdown(styl, unsafe_allow_html=True)
-
-st.title("💬 外文文献助手")
-st.caption('你可以联网查询和下载相关领域的外文文献，并撰写论文综述。你也可以上传一个pdf,对其进行分析')
+# st.set_page_config(layout="wide")
+st.title("💬 外文文献助手+丐版数据分析助手")
+st.caption('你可以联网查询相关领域的外文文献，并做初步的分析。你也可以上传一个pdf进行文本分析或者csv进行数据分析，绘制科研图纸')
 uploaded_file = st.file_uploader("选择一个纯文本docx文件或者pdf文件",accept_multiple_files=False,label_visibility="hidden")
 if uploaded_file is None:
     st.cache_resource.clear()
@@ -357,7 +364,24 @@ def read_research_articles(input_str:str):
     #     docs = docsearch.similarity_search(st.session_state["messages_prompt"][-1], k=10)
     #     st.write(st.session_state["messages_prompt"][-1])
     #     return docs
-
+from langchain.agents.agent_toolkits.pandas.base import create_pandas_dataframe_agent
+def csv_agent(
+    llm: BaseLanguageModel,
+    uploaded_file: uploaded_file,
+) -> AgentExecutor:
+    df=pd.read_csv(uploaded_file)
+    return create_pandas_dataframe_agent(llm=llm,df=df, verbose=True,return_intermediate_steps=True)
+agent_executor = create_python_agent(
+    llm=ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613"),
+    tool=PythonREPLTool(),
+    verbose=True,
+    agent_type=AgentType.OPENAI_FUNCTIONS,
+    agent_executor_kwargs={"handle_parsing_errors": True},
+)
+def csv_agent_(query):
+    csv_agent_=csv_agent(llm=ChatOpenAI(temperature=0, model="gpt-3.5-turbo"),uploaded_file=uploaded_file)
+    s=csv_agent_.run(query)
+    return s
 
 tools = [
     Tool(
@@ -390,6 +414,10 @@ tools = [
         func=search_read_upload_pdf,
         description='''当您需要回答关于文件的问题时很有用。输入应为完整的问题'''
     ),
+    # Tool(
+    #     name="csv_agent",
+    #     func=csv_agent_,
+    #     description="""当上传文件是csv数据文件的时候用这个,如果有图片就用streamlit的st.image()展示出来，you must use Action: python_repl_ast"""),
 ]
 
 
@@ -415,10 +443,29 @@ class CustomPromptTemplate(StringPromptTemplate):
 
     def format(self, **kwargs) -> str:
         intermediate_steps = kwargs.pop("intermediate_steps")
-        search_present = any(step[0].tool in ['search_research_articles','read_research_articles','search_Cache'] for step in intermediate_steps)
+        search_present = any(step[0].tool in ['search_research_articles','read_research_articles','search_Cache','csv_agent'] for step in intermediate_steps)
         # background_infomation=[]
         # print(background_infomation)
         # 没有互联网查询信息
+#         if uploaded_file is not None and uploaded_file.name.lower().endswith('.csv')and len(intermediate_steps)==0:
+#             tools = "csv_agent"
+#             tool_names = "csv_agent"
+#             background_infomation = "\n"
+#             question_guide = ""
+#             history = st.session_state["回答内容_article"]
+#             answer_format = f'''像一个海盗一样进行回答
+# You can use the following tools:
+#
+# {tools}
+#
+# Please strictly follow the format below to answer:
+#
+# 问题:(The question you need to answer)
+# 思考:(What you should consider doing)
+# 操作:one of [{tool_names}]
+# 操作输入:(The keywords you input should be English)
+# '''
+
         if uploaded_file is not None and len(intermediate_steps)== 2:
             thoughts = ""
             for action, observation in intermediate_steps:
@@ -573,9 +620,8 @@ class CustomOutputParser(AgentOutputParser):
         return [AgentAction(
             tool=action, tool_input=action_input.strip(" ").strip('"'), log=llm_output
         )]
-#
+#非csv执行agent
 llm = ChatOpenAI(model_name="gpt-3.5-turbo-16k", openai_api_key=os.getenv('OPENAI_API_KEY'), streaming=True,temperature=0.2)
-
 output_parser = CustomOutputParser()
 llm_chain = LLMChain(llm=llm, prompt=prompt)
 tool_names = [tool.name for tool in tools]
@@ -590,26 +636,56 @@ agent_wzm = AgentExecutor.from_agent_and_tools(
         agent=agent, tools=tools, verbose=True
     )
 
-
-# if uploaded_file is not None and st.button('上传'):
-
-
+accepted_extensions = ('.csv', '.xlsx', '.xls', '.json', '.html', '.parquet', '.msgpack',
+                       '.hdf', '.feather', '.dta', '.pkl', '.sas', '.sql', '.gbq')
 
 if prompt := st.chat_input(placeholder="在这打字，进行提问"):
+# 清除缓存图片clean_tmp
+    if prompt == 'clean':
+        work_directory = "./tmp"  # 请替换为您的工作目录路径
+        # 遍历工作文件夹中的所有文件
+        for filename in os.listdir(work_directory):
+            # 检查文件是否是图片（这里只检查了几种常见的图片扩展名，可以根据需要进行添加）
+            if filename.endswith('.png') or filename.endswith('.jpg') or filename.endswith(
+                    '.jpeg') or filename.endswith('.gif'):
+                file_path = os.path.join(work_directory, filename)
+                os.remove(file_path)  # 删除图片文件
+                st.write(f"Deleted {file_path}")
+        st.write("All images in the working directory have been deleted.")
+        sys.exit()
+    # 前端缓存处理
     st.session_state['messages_article'].append({"role": "user", "content": prompt})
     st.session_state["回答内容_article"].append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
+    # 执行文件
     with st.chat_message("assistant"):
         st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
-        response = agent_wzm.run(prompt,callbacks=[st_cb])
+        # 如果上传了csv则运行这个agent
+        if uploaded_file is not None and uploaded_file.name.lower().endswith(accepted_extensions):
+            agent_wzm = csv_agent(llm=ChatOpenAI(temperature=0, model="gpt-3.5-turbo"), uploaded_file=uploaded_file)
+            response_orgin = agent_wzm(f'''question:{prompt},
+            history:{st.session_state['messages_article']},'''
+                                     f"Whenever you're generating or modify a plot, all plot must have title,Axis Labels, and make sure to save the image to a temporary directory first. You can do so using the following command:'plt.savefig(./tmp/{uploaded_file.name}.png)'. Ensure you have already imported Streamlit with 'import streamlit as st' at the beginning of your code. After saving the image, you can display it on your Streamlit app using: 'st.image(./tmp/{uploaded_file.name}.png)'. After it's been displayed, it's a good practice to clean up the temporary files. You can delete the image using: 'os.remove(./tmp/{uploaded_file.name}.png)'."
+                                     f"you must use Action: python_repl_ast.you must analyse the plot and data as best as you can",callbacks=[st_cb])
+            for observersion in response_orgin["intermediate_steps"]:
+                try:
+                    if "ValueError" not in observersion[1] or "NameError"not in observersion[1] or "TypeError"not in observersion[1]:
+                        st.write(observersion[1])
+                        s=observersion[1]
+                        st.session_state['messages_article'].append({"role": "assistant", "content": s})
+                except TypeError as e:
+                    pass
+            response=response_orgin['output']
+        # 否则运行这个agent
+        else:
+            response = agent_wzm.run(prompt,callbacks=[st_cb])
+        # 前端缓存处理
         st.session_state["回答内容_article"].append({"role": "assistant", "content": response})
         st.session_state['messages_article'].append({"role": "assistant", "content": response})
         st.session_state['回答次数_article'] = st.session_state['回答次数_article'] + 1
         st.write(response)
-
     conversation_string = ""
     short_state_num = len(st.session_state["回答内容_article"])
-
     start_round = int(short_state_num * 3 / 10)
     end_round = int(short_state_num * 7 / 10)
     for i in range(short_state_num):
