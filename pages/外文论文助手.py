@@ -28,7 +28,6 @@ import streamlit as st
 from langchain.vectorstores import Chroma
 import PyPDF2
 import tempfile
-import os
 import split
 import requests
 import json
