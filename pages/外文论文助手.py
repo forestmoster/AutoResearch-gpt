@@ -659,25 +659,25 @@ if prompt := st.chat_input(placeholder="在这打字，进行提问"):
     # 执行文件
     with st.chat_message("assistant"):
         st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
-        # # 如果上传了csv则运行这个agent
-        # if uploaded_file is not None and uploaded_file.name.lower().endswith(accepted_extensions):
-        #     agent_wzm = csv_agent(llm=ChatOpenAI(temperature=0, model="gpt-3.5-turbo"), uploaded_file=uploaded_file)
-        #     response_orgin = agent_wzm(f'''question:{prompt},
-        #     history:{st.session_state['messages_article']},'''
-        #                              f"Whenever you're generating or modify a plot, all plot must have title,Axis Labels, and make sure to save the image to a temporary directory first. You can do so using the following command:'plt.savefig(./tmp/{uploaded_file.name}.png)'. Ensure you have already imported Streamlit with 'import streamlit as st' at the beginning of your code. After saving the image, you can display it on your Streamlit app using: 'st.image(./tmp/{uploaded_file.name}.png)'. After it's been displayed, it's a good practice to clean up the temporary files. You can delete the image using: 'os.remove(./tmp/{uploaded_file.name}.png)'."
-        #                              f"you must use Action: python_repl_ast.you must analyse the plot and data as best as you can",callbacks=[st_cb])
-        #     for observersion in response_orgin["intermediate_steps"]:
-        #         try:
-        #             if "ValueError" not in observersion[1] or "NameError"not in observersion[1] or "TypeError"not in observersion[1]:
-        #                 st.write(observersion[1])
-        #                 s=observersion[1]
-        #                 st.session_state['messages_article'].append({"role": "assistant", "content": s})
-        #         except TypeError as e:
-        #             pass
-        #     response=response_orgin['output']
-        # # 否则运行这个agent
-        # else:
-        response = agent_wzm.run(prompt,callbacks=[st_cb])
+        # 如果上传了csv则运行这个agent
+        if uploaded_file is not None and uploaded_file.name.lower().endswith(accepted_extensions):
+            agent_wzm = csv_agent(llm=ChatOpenAI(temperature=0, model="gpt-3.5-turbo"), uploaded_file=uploaded_file)
+            response_orgin = agent_wzm(f'''question:{prompt},
+            history:{st.session_state['messages_article']},'''
+                                     f"Whenever you're generating or modify a plot, all plot must have title,Axis Labels, and make sure to save the image to a temporary directory first. You can do so using the following command:'plt.savefig(./tmp/{uploaded_file.name}.png)'. Ensure you have already imported Streamlit with 'import streamlit as st' at the beginning of your code. After saving the image, you can display it on your Streamlit app using: 'st.image(./tmp/{uploaded_file.name}.png)'. After it's been displayed, it's a good practice to clean up the temporary files. You can delete the image using: 'os.remove(./tmp/{uploaded_file.name}.png)'."
+                                     f"you must use Action: python_repl_ast.you must analyse the plot and data as best as you can",callbacks=[st_cb])
+            for observersion in response_orgin["intermediate_steps"]:
+                try:
+                    if "ValueError" not in observersion[1] or "NameError"not in observersion[1] or "TypeError"not in observersion[1]:
+                        st.write(observersion[1])
+                        s=observersion[1]
+                        st.session_state['messages_article'].append({"role": "assistant", "content": s})
+                except TypeError as e:
+                    pass
+            response=response_orgin['output']
+        # 否则运行这个agent
+        else:
+            response = agent_wzm.run(prompt,callbacks=[st_cb])
         # 前端缓存处理
         st.session_state["回答内容_article"].append({"role": "assistant", "content": response})
         st.session_state['messages_article'].append({"role": "assistant", "content": response})
