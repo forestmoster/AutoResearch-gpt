@@ -1,7 +1,7 @@
 
-import sys
-__import__("pysqlite3")
-sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
+# import sys
+# __import__("pysqlite3")
+# sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
 
 
 import ast
@@ -661,15 +661,25 @@ if prompt := st.chat_input(placeholder="在这打字，进行提问"):
         st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
         # 如果上传了csv则运行这个agent
         if uploaded_file is not None and uploaded_file.name.lower().endswith(accepted_extensions):
-            agent_wzm = csv_agent(llm=ChatOpenAI(temperature=0, model="gpt-3.5-turbo"), uploaded_file=uploaded_file)
+            agent_wzm = csv_agent(llm=ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613"), uploaded_file=uploaded_file)
             response_orgin = agent_wzm(f'''question:{prompt},
             history:{st.session_state['回答内容_article']},'''
-                                     f"Whenever you're generating or modify a plot,you must display it on Streamlit.First,you should save the image to a temporary directory,You can use the following command:'plt.savefig(./tmp/{uploaded_file.name}.png)'.SECOND ensure you have already imported Streamlit with 'import streamlit as st' at the beginning of your code. THIRD after saving the image, you can display it on your Streamlit app using: 'st.image(./tmp/{uploaded_file.name}.png)'. After it's been displayed,  You must delete the image using: 'os.remove(./tmp/{uploaded_file.name}.png)'."
-                                     f"All plot should have a clear title and axis labels."
-                                     f"you must use Action: python_repl_ast.",callbacks=[st_cb])
+                                     # f"Whenever you're generating or modify a plot,you must display it on Streamlit.First,you should save the image to a temporary directory,You can use the following command:'plt.savefig(./tmp/{uploaded_file.name}.png)'.SECOND ensure you have already imported Streamlit with 'import streamlit as st' at the beginning of your code. THIRD after saving the image, you can display it on your Streamlit app using: 'st.image(./tmp/{uploaded_file.name}.png)'. After it's been displayed,  You must delete the image using: 'os.remove(./tmp/{uploaded_file.name}.png)'."
+                                     # f"All plot should have a clear title and axis labels."
+                                     # f"you must use this 'Action:python_repl_ast' ",callbacks=[st_cb])
+                                      f'''"Whenever you're generating or modifying a plot, you must display it on Streamlit. The process involves the following steps:
+1. First, save the image to a temporary directory. You can use the following command: 'plt.savefig('./tmp/{uploaded_file.name}.png')'.
+2. Second, ensure you have already imported Streamlit with 'import streamlit as st' at the beginning of your code.
+3. Third, after saving the image, you can display it on your Streamlit app using: 'st.image('./tmp/{uploaded_file.name}.png')'.
+4. Finally, after it's been displayed, delete the image using: 'os.remove('./tmp/{uploaded_file.name}.png')'.
+
+Remember, all plots should have a clear title and axis labels for better interpretation.
+
+you must use this 'Action:python_repl_ast' ''',callbacks=[st_cb])
             for observersion in response_orgin["intermediate_steps"]:
                 try:
-                    if "ValueError" not in observersion[1] or "NameError"not in observersion[1] or "TypeError"not in observersion[1]:
+                    if "ValueError" not in observersion[1] and "NameError" not in observersion[1] and "TypeError" not in \
+                            observersion[1]:
                         st.write(observersion[1])
                         # s=observersion[1]
                         # st.session_state['messages_article'].append({"role": "assistant", "content": s})
