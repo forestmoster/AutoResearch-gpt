@@ -31,9 +31,9 @@ import tempfile
 import split
 import requests
 import json
-api_key='8j9mqPr37oHsORDKJTWyeYMdBGgA5cZz'
-import os
 
+import os
+api_key=os.getenv('coreapikey')
 def list_directory_contents(directory_path):
     return os.listdir(directory_path)
 
