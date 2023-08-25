@@ -1,8 +1,7 @@
-# 部署服务器的时候需要用这个
-# if your do it in web  use it else not
-import sys
-__import__("pysqlite3")
-sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
+
+# import sys
+# __import__("pysqlite3")
+# sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
 
 
 import ast
@@ -32,8 +31,9 @@ import tempfile
 import split
 import requests
 import json
+api_key='8j9mqPr37oHsORDKJTWyeYMdBGgA5cZz'
 import os
-api_key=os.getenv('coreapikey')
+
 def list_directory_contents(directory_path):
     return os.listdir(directory_path)
 
@@ -675,7 +675,7 @@ if prompt := st.chat_input(placeholder="在这打字，进行提问"):
 
 Remember, all plots should have a clear title and axis labels for better interpretation.
 
-you must use this:'Action:python_repl_ast' ''',callbacks=[st_cb])
+you must use this 'Action:python_repl_ast' ''',callbacks=[st_cb])
             for observersion in response_orgin["intermediate_steps"]:
                 try:
                     if "ValueError" not in observersion[1] and "NameError" not in observersion[1] and "TypeError" not in \
