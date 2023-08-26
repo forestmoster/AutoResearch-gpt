@@ -678,9 +678,8 @@ Remember, all plots should have a clear title and axis labels for better interpr
 you must use this 'Action:python_repl_ast' ''',callbacks=[st_cb])
             for observersion in response_orgin["intermediate_steps"]:
                 try:
-                    if "ValueError" not in observersion[1] and "NameError" not in observersion[1] and "TypeError" not in \
-                            observersion[1]:
-                        st.write(observersion[1])
+                    if isinstance(observersion[1], pd.DataFrame):
+                        st.dataframe(observersion[1])
                         # s=observersion[1]
                         # st.session_state['messages_article'].append({"role": "assistant", "content": s})
                 except TypeError as e:
