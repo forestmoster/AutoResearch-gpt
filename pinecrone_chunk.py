@@ -8,6 +8,14 @@ import streamlit as st
 import PyPDF2
 import jieba.analyse
 
+def load_all_stopwords(dir_path):
+    """
+    Load all stopwords from all files in a directory and set them in jieba.
+    """
+    for filename in os.listdir(dir_path):
+        if filename.endswith(".txt"):  # 假设所有的停用词文件都以.txt结尾
+            file_path = os.path.join(dir_path, filename)
+            jieba.analyse.set_stop_words(file_path)
 
 def extract_sentences(text_list):
     sentences = []
@@ -76,6 +84,7 @@ def chunk_docx (title_long:int,MAX_TOKENS:int,BATCH_SIZE:int,uploaded_file:str):
         if 0 < len(paragraph) <= title_long or font_bold==True:
             titles.append(paragraph)
         elif len(paragraph) > title_long:
+            load_all_stopwords('./stopwords-master')
             tags=jieba.analyse.extract_tags(paragraph,topK=5)
             text.append(paragraph)
             text_count.append(paragraph)
