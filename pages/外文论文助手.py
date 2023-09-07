@@ -635,8 +635,7 @@ agent_wzm = AgentExecutor.from_agent_and_tools(
         agent=agent, tools=tools, verbose=True
     )
 
-accepted_extensions = ('.csv', '.xlsx', '.xls', '.json', '.html', '.parquet', '.msgpack',
-                       '.hdf', '.feather', '.dta', '.pkl', '.sas', '.sql', '.gbq')
+accepted_extensions = ('.csv', )
 
 if prompt := st.chat_input(placeholder="在这打字，进行提问"):
 # 清除缓存图片clean_tmp
