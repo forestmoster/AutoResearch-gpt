@@ -5,6 +5,7 @@ sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
 
 
 import ast
+import shutil
 import sys
 from typing import List
 import re
@@ -381,327 +382,329 @@ def csv_agent_(query):
     csv_agent_=csv_agent(llm=ChatOpenAI(temperature=0, model="gpt-3.5-turbo"),uploaded_file=uploaded_file)
     s=csv_agent_.run(query)
     return s
-
-tools = [
-    Tool(
-        name="search_research_title_url_abstract",
-        func=search_research_title_url_abstract,
-        description='''当只需要查找论文的标题或者查找论文的url，摘要，适合使用这个工具，
-        If you use this tool,please use the action input format and the input must be automatically translate to English:(title:xxxxx OR abstract:xxxxx) AND (title:"xxxxxxx" OR abstract:"xxxxxxxx") AND year>20xx'''),
-    Tool(
-        name="search_research_articles",
-        func=search_research_articles,
-        description='''当只知道论文的关键词不知道url，用这个工具可以关键词搜索查看论文的全文,并且进行分析，If you use this tool,please use the action input format and the input must be automatically translate to English:(title:xxxxx OR abstract:xxxxx) AND (title:"xxxxxxx" OR abstract:"xxxxxxxx") AND year>20xx'''
-    ),
-    Tool(
-        name="read_research_articles",
-        func=read_research_articles,
-        description='''用这个工具的前提是知道某几篇论文的url(url must have keyword:download)后，用这个工具可以查看论文的全文,并且进行分析，If you use this tool,please use the action input format and the input must be list:['https://core.ac.uk/download/xxxxxx.pdf',......]'''
-    ),
-    Tool(
-        name="search_Cache",
-        func=search_Cache,
-        description='''用这个工具的前提是判断提问是否和缓存内容有关，用这个工具可以直接调取缓存中的数据，而不用下载论文'''
-    ),
-    Tool(
-        name="search_doi",
-        func=search_doi,
-        description='''当知道论文的doi时，用这个工具可以搜索到论文的url,If you use this tool,please use the action input format and the input must be list:['xxxxxxxx',......]:'''
-    ),
-    Tool(
-        name="search_read_upload_pdf",
-        func=search_read_upload_pdf,
-        description='''当您需要回答关于文件的问题时很有用。输入应为完整的问题'''
-    ),
-    # Tool(
-    #     name="csv_agent",
-    #     func=csv_agent_,
-    #     description="""当上传文件是csv数据文件的时候用这个,如果有图片就用streamlit的st.image()展示出来，you must use Action: python_repl_ast"""),
-]
-
-
-
-template = """
-
-{answer_format}
-
-历史对话记录:{history}
-
-{cache}
-
-{question_guide}：{input}
-
-{background_infomation}
+if __name__=='__main__':
+    tools = [
+        Tool(
+            name="search_research_title_url_abstract",
+            func=search_research_title_url_abstract,
+            description='''当只需要查找论文的标题或者查找论文的url，摘要，适合使用这个工具，
+            If you use this tool,please use the action input format and the input must be automatically translate to English:(title:xxxxx OR abstract:xxxxx) AND (title:"xxxxxxx" OR abstract:"xxxxxxxx") AND year>20xx'''),
+        Tool(
+            name="search_research_articles",
+            func=search_research_articles,
+            description='''当只知道论文的关键词不知道url，用这个工具可以关键词搜索查看论文的全文,并且进行分析，If you use this tool,please use the action input format and the input must be automatically translate to English:(title:xxxxx OR abstract:xxxxx) AND (title:"xxxxxxx" OR abstract:"xxxxxxxx") AND year>20xx'''
+        ),
+        Tool(
+            name="read_research_articles",
+            func=read_research_articles,
+            description='''用这个工具的前提是知道某几篇论文的url(url must have keyword:download)后，用这个工具可以查看论文的全文,并且进行分析，If you use this tool,please use the action input format and the input must be list:['https://core.ac.uk/download/xxxxxx.pdf',......]'''
+        ),
+        Tool(
+            name="search_Cache",
+            func=search_Cache,
+            description='''用这个工具的前提是判断提问是否和缓存内容有关，用这个工具可以直接调取缓存中的数据，而不用下载论文'''
+        ),
+        Tool(
+            name="search_doi",
+            func=search_doi,
+            description='''当知道论文的doi时，用这个工具可以搜索到论文的url,If you use this tool,please use the action input format and the input must be list:['xxxxxxxx',......]:'''
+        ),
+        Tool(
+            name="search_read_upload_pdf",
+            func=search_read_upload_pdf,
+            description='''当您需要回答关于文件的问题时很有用。输入应为完整的问题'''
+        ),
+        # Tool(
+        #     name="csv_agent",
+        #     func=csv_agent_,
+        #     description="""当上传文件是csv数据文件的时候用这个,如果有图片就用streamlit的st.image()展示出来，you must use Action: python_repl_ast"""),
+    ]
 
 
-"""
 
-class CustomPromptTemplate(StringPromptTemplate):
-    template: str
-    tools: List[Tool]
+    template = """
+    
+    {answer_format}
+    
+    历史对话记录:{history}
+    
+    {cache}
+    
+    {question_guide}：{input}
+    
+    {background_infomation}
+    
+    
+    """
 
-    def format(self, **kwargs) -> str:
-        intermediate_steps = kwargs.pop("intermediate_steps")
-        search_present = any(step[0].tool in ['search_research_articles','read_research_articles','search_Cache','csv_agent'] for step in intermediate_steps)
-        # background_infomation=[]
-        # print(background_infomation)
-        # 没有互联网查询信息
-#         if uploaded_file is not None and uploaded_file.name.lower().endswith('.csv')and len(intermediate_steps)==0:
-#             tools = "csv_agent"
-#             tool_names = "csv_agent"
-#             background_infomation = "\n"
-#             question_guide = ""
-#             history = st.session_state["回答内容_article"]
-#             answer_format = f'''像一个海盗一样进行回答
-# You can use the following tools:
-#
-# {tools}
-#
-# Please strictly follow the format below to answer:
-#
-# 问题:(The question you need to answer)
-# 思考:(What you should consider doing)
-# 操作:one of [{tool_names}]
-# 操作输入:(The keywords you input should be English)
-# '''
+    class CustomPromptTemplate(StringPromptTemplate):
+        template: str
+        tools: List[Tool]
 
-        if uploaded_file is not None and len(intermediate_steps)== 2:
-            thoughts = ""
-            for action, observation in intermediate_steps:
-                # thoughts += action.log
-                thoughts += f"\n背景信息:{observation}\n"
-            # Set the agent_scratchpad variable to that value
-            background_infomation = thoughts
-            # background_infomation += f"{observation}\n"
-            question_guide = "请结合这些背景信息回答我的问题，文章结尾需要有参考文献"
-            history = st.session_state["回答内容_article"]
-            answer_format = ''
-        elif uploaded_file is not None:
-            tools = "search_read_upload_pdf"
-            tool_names = "search_read_upload_pdf"
-            background_infomation = "\n"
-            question_guide = ""
-            history = st.session_state["回答内容_article"]
-            answer_format =f'''像一个海盗一样进行回答
-You can use the following tools:
+        def format(self, **kwargs) -> str:
+            intermediate_steps = kwargs.pop("intermediate_steps")
+            search_present = any(step[0].tool in ['search_research_articles','read_research_articles','search_Cache','csv_agent'] for step in intermediate_steps)
+            # background_infomation=[]
+            # print(background_infomation)
+            # 没有互联网查询信息
+    #         if uploaded_file is not None and uploaded_file.name.lower().endswith('.csv')and len(intermediate_steps)==0:
+    #             tools = "csv_agent"
+    #             tool_names = "csv_agent"
+    #             background_infomation = "\n"
+    #             question_guide = ""
+    #             history = st.session_state["回答内容_article"]
+    #             answer_format = f'''像一个海盗一样进行回答
+    # You can use the following tools:
+    #
+    # {tools}
+    #
+    # Please strictly follow the format below to answer:
+    #
+    # 问题:(The question you need to answer)
+    # 思考:(What you should consider doing)
+    # 操作:one of [{tool_names}]
+    # 操作输入:(The keywords you input should be English)
+    # '''
 
-{tools}
+            if uploaded_file is not None and len(intermediate_steps)== 2:
+                thoughts = ""
+                for action, observation in intermediate_steps:
+                    # thoughts += action.log
+                    thoughts += f"\n背景信息:{observation}\n"
+                # Set the agent_scratchpad variable to that value
+                background_infomation = thoughts
+                # background_infomation += f"{observation}\n"
+                question_guide = "请结合这些背景信息回答我的问题，文章结尾需要有参考文献"
+                history = st.session_state["回答内容_article"]
+                answer_format = ''
+            elif uploaded_file is not None:
+                tools = "search_read_upload_pdf"
+                tool_names = "search_read_upload_pdf"
+                background_infomation = "\n"
+                question_guide = ""
+                history = st.session_state["回答内容_article"]
+                answer_format =f'''像一个海盗一样进行回答
+    You can use the following tools:
+    
+    {tools}
+    
+    Please strictly follow the format below to answer:
+    
+    问题:(The question you need to answer)
+    思考:(What you should consider doing)
+    操作:one of [{tool_names}]
+    操作输入:(The keywords you input should be English)
+    观察:(操作的结果)
+    ... (这个 思考/操作/操作输入/观察 可以重复N次)
+    思考: I now know the final answer
+    最终答案: the final answer to the original input question
+    '''
+            elif len(intermediate_steps)== 0:
+                tools = "\n".join([f"{tool.name}: {tool.description}" for tool in self.tools])
+                tool_names=",".join([tool.name for tool in self.tools])
+                background_infomation="\n"
+                question_guide = ""
+                history=st.session_state["回答内容_article"]
+                # cache=f'缓存内容是和{}相关'
+                answer_format = f"""Complete the objective as best you can.
+    
+    You can use the following tools:
+    
+    {tools}
+    
+    Please strictly follow the format below to answer:
+    
+    问题:(The question you need to answer)
+    思考:(What you should consider doing)
+    操作:one of [{tool_names}]
+    操作输入:(The keywords you input should be English)
+    
+    上述模板可以按照这样填充：
+    问题:请帮我分析一下最新的关于xxxx的一篇文章，并进行分析。
+    思考:首先，我们需要找到最新的关于xxxx的文章。以便进行分析。
+    操作:one of [{tool_names}]
+    操作输入:(The keywords you input should be English)
+    """
 
-Please strictly follow the format below to answer:
+            # 返回了背景信息
+            elif 0<len(intermediate_steps)<2 :
+                tools = "\n".join([f"{tool.name}: {tool.description}" for tool in self.tools])
+                tool_names = ",".join([tool.name for tool in self.tools])
+                # 根据 intermediate_steps 中的 AgentAction 拼装 background_infomation
+                # background_infomation = "\n\n你还有这些已知信息作为参考：\n\n"
+                # action, observation = intermediate_steps[0]
+                thoughts = ""
+                for action, observation in intermediate_steps:
+                    thoughts += action.log
+                    thoughts += f"\n观察:{observation}\n思考:"
+                # Set the agent_scratchpad variable to that value
+                background_infomation=thoughts
+                # background_infomation += f"{observation}\n"
+                question_guide = "请结合这些背景信息写出答案,最后需要有参考文献"
+                history =st.session_state["回答内容_article"]
+                answer_format =f'''像一个海盗一样进行回答
+    You can use the following tools:
+    
+    {tools}
+    
+    Please strictly follow the format below to answer:
+    
+    问题:(The question you need to answer)
+    思考:(What you should consider doing)
+    操作:one of [{tool_names}]
+    操作输入:(The keywords you input should be English)
+    观察:(操作的结果)
+    ... (这个 思考/操作/操作输入/观察 可以重复N次)
+    思考: I now know the final answer
+    最终答案: the final answer to the original input question
+    
+    上述模板可以按照这样填充：
+    
+    思考:阅读论文，获取关于xxxxx的研究综述
+    操作:xxxxx
+    操作输入:[{{title:xxxxx,abstract_keywords:xxxxxxx,url:https://core.ac.uk/download......}},......]
+    观察:(操作的结果)
+    思考:我找到答案了
+    最终答案:the final answer to the original input question
+    '''
+            else :
+                # 根据 intermediate_steps 中的 AgentAction 拼装 background_infomation
+                # action, observation = intermediate_steps[0]
+                thoughts = ""
+                for action, observation in intermediate_steps:
+                    # thoughts += action.log
+                    thoughts += f"\n背景信息:{observation}\n"
+                # Set the agent_scratchpad variable to that value
+                background_infomation=thoughts
+                # background_infomation += f"{observation}\n"
+                question_guide = "请结合这些背景信息回答我的问题，文章结尾需要有参考文献"
+                history =st.session_state["回答内容_article"]
+                answer_format = ''
 
-问题:(The question you need to answer)
-思考:(What you should consider doing)
-操作:one of [{tool_names}]
-操作输入:(The keywords you input should be English)
-观察:(操作的结果)
-... (这个 思考/操作/操作输入/观察 可以重复N次)
-思考: I now know the final answer
-最终答案: the final answer to the original input question
-'''
-        elif len(intermediate_steps)== 0:
-            tools = "\n".join([f"{tool.name}: {tool.description}" for tool in self.tools])
-            tool_names=",".join([tool.name for tool in self.tools])
-            background_infomation="\n"
-            question_guide = ""
-            history=st.session_state["回答内容_article"]
-            # cache=f'缓存内容是和{}相关'
-            answer_format = f"""Complete the objective as best you can.
+            kwargs["background_infomation"] = background_infomation
+            kwargs["question_guide"] = question_guide
+            kwargs["answer_format"] = answer_format
+            kwargs["history"] = history
+            kwargs["cache"] = f'缓存大概内容:{st.session_state["messages_wikipedia_缓存关键词"]}'
+            return self.template.format(**kwargs)
 
-You can use the following tools:
-
-{tools}
-
-Please strictly follow the format below to answer:
-
-问题:(The question you need to answer)
-思考:(What you should consider doing)
-操作:one of [{tool_names}]
-操作输入:(The keywords you input should be English)
-
-上述模板可以按照这样填充：
-问题:请帮我分析一下最新的关于xxxx的一篇文章，并进行分析。
-思考:首先，我们需要找到最新的关于xxxx的文章。以便进行分析。
-操作:one of [{tool_names}]
-操作输入:(The keywords you input should be English)
-"""
-
-        # 返回了背景信息
-        elif 0<len(intermediate_steps)<2 and search_present==False:
-            tools = "\n".join([f"{tool.name}: {tool.description}" for tool in self.tools])
-            tool_names = ",".join([tool.name for tool in self.tools])
-            # 根据 intermediate_steps 中的 AgentAction 拼装 background_infomation
-            # background_infomation = "\n\n你还有这些已知信息作为参考：\n\n"
-            # action, observation = intermediate_steps[0]
-            thoughts = ""
-            for action, observation in intermediate_steps:
-                thoughts += action.log
-                thoughts += f"\n观察:{observation}\n思考:"
-            # Set the agent_scratchpad variable to that value
-            background_infomation=thoughts
-            # background_infomation += f"{observation}\n"
-            question_guide = "请结合这些背景信息写出答案,最后需要有参考文献"
-            history =st.session_state["回答内容_article"]
-            answer_format =f'''像一个海盗一样进行回答
-You can use the following tools:
-
-{tools}
-
-Please strictly follow the format below to answer:
-
-问题:(The question you need to answer)
-思考:(What you should consider doing)
-操作:one of [{tool_names}]
-操作输入:(The keywords you input should be English)
-观察:(操作的结果)
-... (这个 思考/操作/操作输入/观察 可以重复N次)
-思考: I now know the final answer
-最终答案: the final answer to the original input question
-
-上述模板可以按照这样填充：
-
-思考:阅读论文，获取关于xxxxx的研究综述
-操作:xxxxx
-操作输入:[{{title:xxxxx,abstract_keywords:xxxxxxx,url:https://core.ac.uk/download......}},......]
-观察:(操作的结果)
-思考:我找到答案了
-最终答案:the final answer to the original input question
-'''
-        else :
-            # 根据 intermediate_steps 中的 AgentAction 拼装 background_infomation
-            # action, observation = intermediate_steps[0]
-            thoughts = ""
-            for action, observation in intermediate_steps:
-                # thoughts += action.log
-                thoughts += f"\n背景信息:{observation}\n"
-            # Set the agent_scratchpad variable to that value
-            background_infomation=thoughts
-            # background_infomation += f"{observation}\n"
-            question_guide = "请结合这些背景信息回答我的问题，文章结尾需要有参考文献"
-            history =st.session_state["回答内容_article"]
-            answer_format = ''
-
-        kwargs["background_infomation"] = background_infomation
-        kwargs["question_guide"] = question_guide
-        kwargs["answer_format"] = answer_format
-        kwargs["history"] = history
-        kwargs["cache"] = f'缓存大概内容:{st.session_state["messages_wikipedia_缓存关键词"]}'
-        return self.template.format(**kwargs)
-
-prompt = CustomPromptTemplate(
-    template=template,
-    tools=tools,
-    # This omits the `agent_scratchpad`, `tools`, and `tool_names` variables because those are generated dynamically
-    # This includes the `intermediate_steps` variable because that is needed
-    input_variables=["input", "intermediate_steps"],
-)
-
-class CustomOutputParser(AgentOutputParser):
-    def parse(self, llm_output: str) :
-        regex = r"操作：(.*?)[\n]*操作输入：[\s]*(.*)"
-        match = re.search(regex, llm_output, re.DOTALL)
-        if match==None:
-            regex = r"操作:(.*?)[\n]*操作输入:[\s]*(.*)"
-            match = re.search(regex, llm_output, re.DOTALL)
-        if "最终答案:" in llm_output:
-            return AgentFinish(
-                return_values={"output": llm_output.split("最终答案:")[-1].strip()},
-                log=llm_output,
-            )
-        if not match:
-            return AgentFinish(
-                return_values={"output": llm_output},
-                log=llm_output,
-            )
-        action = match.group(1).strip()
-        action_input = match.group(2)
-        # st.session_state["messages_prompt"].append(action_input.strip(" ").strip('"'))
-        # Return the action and action input
-        return [AgentAction(
-            tool=action, tool_input=action_input.strip(" ").strip('"'), log=llm_output
-        )]
-#非csv执行agent
-llm = ChatOpenAI(model_name="gpt-3.5-turbo-16k", openai_api_key=os.getenv('OPENAI_API_KEY'), streaming=True,temperature=0.2)
-output_parser = CustomOutputParser()
-llm_chain = LLMChain(llm=llm, prompt=prompt)
-tool_names = [tool.name for tool in tools]
-agent = LLMSingleActionAgent(
-    llm_chain=llm_chain,
-    output_parser=output_parser,
-    stop=["\n观察:"],
-    allowed_tools=tool_names,
-)
-
-agent_wzm = AgentExecutor.from_agent_and_tools(
-        agent=agent, tools=tools, verbose=True
+    prompt = CustomPromptTemplate(
+        template=template,
+        tools=tools,
+        # This omits the `agent_scratchpad`, `tools`, and `tool_names` variables because those are generated dynamically
+        # This includes the `intermediate_steps` variable because that is needed
+        input_variables=["input", "intermediate_steps"],
     )
 
-accepted_extensions = ('.csv', )
+    class CustomOutputParser(AgentOutputParser):
+        def parse(self, llm_output: str) :
+            regex = r"操作：(.*?)[\n]*操作输入：[\s]*(.*)"
+            match = re.search(regex, llm_output, re.DOTALL)
+            if match==None:
+                regex = r"操作:(.*?)[\n]*操作输入:[\s]*(.*)"
+                match = re.search(regex, llm_output, re.DOTALL)
+            if "最终答案:" in llm_output:
+                return AgentFinish(
+                    return_values={"output": llm_output.split("最终答案:")[-1].strip()},
+                    log=llm_output,
+                )
+            if not match:
+                return AgentFinish(
+                    return_values={"output": llm_output},
+                    log=llm_output,
+                )
+            action = match.group(1).strip()
+            action_input = match.group(2)
+            # st.session_state["messages_prompt"].append(action_input.strip(" ").strip('"'))
+            # Return the action and action input
+            return [AgentAction(
+                tool=action, tool_input=action_input.strip(" ").strip('"'), log=llm_output
+            )]
+    #非csv执行agent
+    llm = ChatOpenAI(model_name="gpt-3.5-turbo-16k", openai_api_key=os.getenv('OPENAI_API_KEY'), streaming=True,temperature=0.2)
+    output_parser = CustomOutputParser()
+    llm_chain = LLMChain(llm=llm, prompt=prompt)
+    tool_names = [tool.name for tool in tools]
+    agent = LLMSingleActionAgent(
+        llm_chain=llm_chain,
+        output_parser=output_parser,
+        stop=["\n观察:"],
+        allowed_tools=tool_names,
+    )
 
-if prompt := st.chat_input(placeholder="在这打字，进行提问"):
-# 清除缓存图片clean_tmp
-    if prompt == 'clean':
-        work_directory = "./tmp"  # 请替换为您的工作目录路径
-        # 遍历工作文件夹中的所有文件
-        for filename in os.listdir(work_directory):
-            # 检查文件是否是图片（这里只检查了几种常见的图片扩展名，可以根据需要进行添加）
-            if filename.endswith('.png') or filename.endswith('.jpg') or filename.endswith(
-                    '.jpeg') or filename.endswith('.gif'):
+    agent_wzm = AgentExecutor.from_agent_and_tools(
+            agent=agent, tools=tools, verbose=True
+        )
+
+    accepted_extensions = ('.csv', )
+
+    if prompt := st.chat_input(placeholder="在这打字，进行提问"):
+    # 清除缓存图片clean_tmp
+        if prompt == 'clean':
+            work_directory = "./tmp"  # 请替换为您的工作目录路径
+            # 遍历工作文件夹中的所有文件
+            for filename in os.listdir(work_directory):
                 file_path = os.path.join(work_directory, filename)
-                os.remove(file_path)  # 删除图片文件
-                st.write(f"Deleted {file_path}")
-        st.write("All images in the working directory have been deleted.")
-        sys.exit()
-    # 前端缓存处理
-    st.session_state['messages_article'].append({"role": "user", "content": prompt})
-    st.session_state["回答内容_article"].append({"role": "user", "content": prompt})
-    st.chat_message("user").write(prompt)
-    # 执行文件
-    with st.chat_message("assistant"):
-        st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
-        # 如果上传了csv则运行这个agent
-        if uploaded_file is not None and uploaded_file.name.lower().endswith(accepted_extensions):
-            agent_wzm = csv_agent(llm=ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613"), uploaded_file=uploaded_file)
-            response_orgin = agent_wzm(f'''question:{prompt},
-            history:{st.session_state['回答内容_article']},'''
-                                     # f"Whenever you're generating or modify a plot,you must display it on Streamlit.First,you should save the image to a temporary directory,You can use the following command:'plt.savefig(./tmp/{uploaded_file.name}.png)'.SECOND ensure you have already imported Streamlit with 'import streamlit as st' at the beginning of your code. THIRD after saving the image, you can display it on your Streamlit app using: 'st.image(./tmp/{uploaded_file.name}.png)'. After it's been displayed,  You must delete the image using: 'os.remove(./tmp/{uploaded_file.name}.png)'."
-                                     # f"All plot should have a clear title and axis labels."
-                                     # f"you must use this 'Action:python_repl_ast' ",callbacks=[st_cb])
-                                      f'''"Whenever you're generating or modifying a plot, you must display it on Streamlit. The process involves the following steps:
-1. First, save the image to a temporary directory. You can use the following command: 'plt.savefig('./tmp/{uploaded_file.name}.png')'.
-2. Second, ensure you have already imported Streamlit with 'import streamlit as st' at the beginning of your code.
-3. Third, after saving the image, you can display it on your Streamlit app using: 'st.image('./tmp/{uploaded_file.name}.png')'.
-4. Finally, after it's been displayed, delete the image using: 'os.remove('./tmp/{uploaded_file.name}.png')'.
-
-Remember, all plots should have a clear title and axis labels for better interpretation.
-
-you must use this 'Action:python_repl_ast' ''',callbacks=[st_cb])
-            for observersion in response_orgin["intermediate_steps"]:
                 try:
-                    if isinstance(observersion[1], pd.DataFrame):
-                        st.dataframe(observersion[1])
-                        # s=observersion[1]
-                        # st.session_state['messages_article'].append({"role": "assistant", "content": s})
-                except TypeError as e:
-                    pass
-            response=response_orgin['output']
-        # 否则运行这个agent
-        else:
-            response = agent_wzm.run(prompt,callbacks=[st_cb])
+                    if os.path.isfile(file_path) or os.path.islink(file_path):
+                        os.unlink(file_path)  # 删除文件
+                    elif os.path.isdir(file_path):
+                        shutil.rmtree(file_path)  # 删除目录
+                except Exception as e:
+                    print(f"Failed to delete {file_path}. Reason: {e}")
+            st.write("All file in the working directory have been deleted.")
+            sys.exit()
         # 前端缓存处理
-        st.session_state["回答内容_article"].append({"role": "assistant", "content": response})
-        st.session_state['messages_article'].append({"role": "assistant", "content": response})
-        st.session_state['回答次数_article'] = st.session_state['回答次数_article'] + 1
-        st.write(response)
-    conversation_string = ""
-    short_state_num = len(st.session_state["回答内容_article"])
-    start_round = int(short_state_num * 3 / 10)
-    end_round = int(short_state_num * 7 / 10)
-    for i in range(short_state_num):
-        conversation_string += st.session_state["回答内容_article"][i]["content"] + "\n"
-    # 调用计算文字的函数
-    conversation_string_num = len(conversation_string)
-    if conversation_string_num > 2000 or st.session_state['回答次数_article'] > 4:
-        del st.session_state["回答内容_article"][start_round: end_round]
-        st.session_state['回答次数_article'] = 1
-    if len(st.session_state["messages_wikipedia_缓存关键词"])>50:
-        st.write('数据库超缓存了！！！,请重修开始一个回答')
+        st.session_state['messages_article'].append({"role": "user", "content": prompt})
+        st.session_state["回答内容_article"].append({"role": "user", "content": prompt})
+        st.chat_message("user").write(prompt)
+        # 执行文件
+        with st.chat_message("assistant"):
+            st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
+            # 如果上传了csv则运行这个agent
+            if uploaded_file is not None and uploaded_file.name.lower().endswith(accepted_extensions):
+                agent_wzm = csv_agent(llm=ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613"), uploaded_file=uploaded_file)
+                response_orgin = agent_wzm(f'''question:{prompt},
+                history:{st.session_state['回答内容_article']},'''
+                                         # f"Whenever you're generating or modify a plot,you must display it on Streamlit.First,you should save the image to a temporary directory,You can use the following command:'plt.savefig(./tmp/{uploaded_file.name}.png)'.SECOND ensure you have already imported Streamlit with 'import streamlit as st' at the beginning of your code. THIRD after saving the image, you can display it on your Streamlit app using: 'st.image(./tmp/{uploaded_file.name}.png)'. After it's been displayed,  You must delete the image using: 'os.remove(./tmp/{uploaded_file.name}.png)'."
+                                         # f"All plot should have a clear title and axis labels."
+                                         # f"you must use this 'Action:python_repl_ast' ",callbacks=[st_cb])
+                                          f'''"Whenever you're generating or modifying a plot, you must display it on Streamlit. The process involves the following steps:
+    1. First, save the image to a temporary directory. You can use the following command: 'plt.savefig('./tmp/{uploaded_file.name}.png')'.
+    2. Second, ensure you have already imported Streamlit with 'import streamlit as st' at the beginning of your code.
+    3. Third, after saving the image, you can display it on your Streamlit app using: 'st.image('./tmp/{uploaded_file.name}.png')'.
+    4. Finally, after it's been displayed, delete the image using: 'os.remove('./tmp/{uploaded_file.name}.png')'.
+    
+    Remember, all plots should have a clear title and axis labels for better interpretation.
+    
+    you must use this 'Action:python_repl_ast' ''',callbacks=[st_cb])
+                for observersion in response_orgin["intermediate_steps"]:
+                    try:
+                        if isinstance(observersion[1], pd.DataFrame):
+                            st.dataframe(observersion[1])
+                            # s=observersion[1]
+                            # st.session_state['messages_article'].append({"role": "assistant", "content": s})
+                    except TypeError as e:
+                        pass
+                response=response_orgin['output']
+            # 否则运行这个agent
+            else:
+                response = agent_wzm.run(prompt,callbacks=[st_cb])
+            # 前端缓存处理
+            st.session_state["回答内容_article"].append({"role": "assistant", "content": response})
+            st.session_state['messages_article'].append({"role": "assistant", "content": response})
+            st.session_state['回答次数_article'] = st.session_state['回答次数_article'] + 1
+            st.write(response)
+        conversation_string = ""
+        short_state_num = len(st.session_state["回答内容_article"])
+        start_round = int(short_state_num * 3 / 10)
+        end_round = int(short_state_num * 7 / 10)
+        for i in range(short_state_num):
+            conversation_string += st.session_state["回答内容_article"][i]["content"] + "\n"
+        # 调用计算文字的函数
+        conversation_string_num = len(conversation_string)
+        if conversation_string_num > 2000 or st.session_state['回答次数_article'] > 4:
+            del st.session_state["回答内容_article"][start_round: end_round]
+            st.session_state['回答次数_article'] = 1
+        if len(st.session_state["messages_wikipedia_缓存关键词"])>50:
+            st.write('数据库超缓存了！！！,请重修开始一个回答')
