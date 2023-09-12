@@ -327,6 +327,7 @@ if fruit == "Title(标题) and Abstract (摘要)and Keywords (关键词)":
     '''
 
     if question := st.chat_input(placeholder="在这打字"):
+        st.session_state["content_added"] = False
         response_orgin = search_database_agent(prompt, callbacks=[st_cb])
         update_session_cache(title, response_orgin, title_subfolder)
         st.session_state["prompt_received"] = True
@@ -362,6 +363,7 @@ elif fruit == "Introduction (引言)":
     '''
 
     if question := st.chat_input(placeholder="在这打字"):
+        st.session_state["content_added"] = False
         response_orgin=search_database_agent(prompt, callbacks=[st_cb])
         update_session_cache(title, response_orgin, title_subfolder)
         st.session_state["prompt_received"] = True
@@ -452,6 +454,7 @@ Ensure the tone is formal and the content is supported by relevant scientific re
 '''
     st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
     if question := st.chat_input(placeholder="在这打字"):
+        st.session_state["content_added"] = False
         response_orgin=search_database_agent(prompt, callbacks=[st_cb])
         update_session_cache(title, response_orgin, title_subfolder)
         st.session_state["prompt_received"] = True
@@ -486,6 +489,7 @@ elif fruit == "Conclusion (结论)":
     '''
 
     if question := st.chat_input(placeholder="在这打字"):
+        st.session_state["content_added"] = False
         response_orgin=search_database_agent(prompt, callbacks=[st_cb])
         update_session_cache(title, response_orgin, title_subfolder)
         st.session_state["prompt_received"] = True
@@ -504,7 +508,7 @@ if st.session_state["prompt_received"]:
     title = st.session_state["title"]
     # 如果用户选择了替换内容
     if replace_or_add:
-        st.session_state["content_added"] = False  # 重置 content_added 的状态
+        # st.session_state["content_added"] = False  # 重置 content_added 的状态
         # 替换文档中的内容
         delete_section_content(doc, title)
         # 如果对应的title有response数据，那么更新文档的section
