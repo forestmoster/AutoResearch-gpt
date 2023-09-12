@@ -21,6 +21,9 @@ from control_docx import initialize_doc_with_titles, extract_content_from_doc, d
     add_or_update_section, add_or_update_tables, add_images_to_section
 import re
 
+import sys
+__import__("pysqlite3")
+sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
 
 # 创建tmp临时文件夹
 if 'session_id' not in st.session_state:
