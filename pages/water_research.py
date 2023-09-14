@@ -2,6 +2,7 @@ import io
 import os
 import shutil
 
+import openai
 import pandas as pd
 from docx.shared import Inches
 from langchain import OpenAI, LLMChain
@@ -16,11 +17,12 @@ import uuid
 from docx import Document
 from langchain.tools import Tool
 from typing import List, Union
-from PDF_Chroma import PDFChroma, streamlit_sidebar_delete_database
+from FILE_Chroma import FileChroma, streamlit_sidebar_delete_database
 from control_docx import initialize_doc_with_titles, extract_content_from_doc, delete_section_content, \
     add_or_update_section, add_or_update_tables, add_images_to_section
 import re
 
+# if your deploy app in local you should not use it
 import sys
 __import__("pysqlite3")
 sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
@@ -36,15 +38,16 @@ if not os.path.exists(session_folder):
     os.makedirs(session_folder)
 
 # 实例化pdfchromaxxxxxxxxxxxxxxxxxxxxx
-PDFS=PDFChroma(vector_folder)
+PDFS=FileChroma(vector_folder)
 # 上传文件前端xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 st.title("💬 WATER RESEARCH ARICTICAL")
-st.caption('你可以上传pdf文献和csv，来水一个论文，注意！！！最好5个5个上传pdf，csv文件不能取消')
+st.caption('你可以上传pdf和docx文献和csv，来水一个论文，注意！！！最好5个5个上传，csv文件不能取消')
 uploaded_file = st.file_uploader("选择一个纯文本docx文件或者pdf文件",accept_multiple_files=True,label_visibility="hidden")
 s=st.button(label='提交pdf到数据库')
 if s:
     st.caption('稍等这个过程可能要几min')
     PDFS.upload_pdfs_chroma(uploaded_file)
+    PDFS.upload_docx_chroma(uploaded_file)
 # 在侧边栏中添加一个选择框xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 fruit = st.sidebar.selectbox(
     "Which do you want to write?",
@@ -107,6 +110,35 @@ def update_session_cache(title, response_orgin, title_subfolder):
 def search(query):
     s=PDFS.search_upload_pdfs_chroma(query)
     return s
+
+
+# 这是计算token的函数xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+import re
+
+
+def simple_tokenize(text):
+    """使用正则表达式进行简单的tokenization，基于空格和标点符号"""
+    return re.findall(r'\b\w+\b', text)
+
+
+def count_tokens_in_draft(draft_content):
+    total_tokens = 0
+
+    # 计算texts部分的tokens
+    for text_item in draft_content.get('texts', []):
+        total_tokens += len(simple_tokenize(text_item))
+
+    # 计算tables部分的tokens
+    for table in draft_content.get('tables', []):
+        for table_row in table:
+            for cell in table_row:
+                total_tokens += len(simple_tokenize(cell))
+
+    return total_tokens
+
+
+# xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 tools = [
     Tool(
         name = "Search",
@@ -385,9 +417,14 @@ elif fruit == "Methods(方法)and Results(结果)":
     # 运行主程序
     st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
     agent_wzm = csv_agent(llm=ChatOpenAI(temperature=0, model="gpt-4-0613"), uploaded_files=uploaded_file)
+    # agent_wzm_gpt3=csv_agent(llm=ChatOpenAI(temperature=0, model="gpt-3.5-turbo-16k"), uploaded_files=uploaded_file)
     # Extract the name of the first .csv file from the uploaded_file list
     csv_file_name = next((f.name for f in uploaded_file if f.name.lower().endswith('.csv')), None)
     draft_content = extract_content_from_doc(doc)
+    if count_tokens_in_draft(draft_content) >=5500:
+        messages = [{"role": "user", "content": f"Based on the detailed background information provided below, summarize the context and then suggest an appropriate research method and potential results.Detailed Background:{draft_content}"}]
+        response_draft=openai.ChatCompletion.create(model="gpt-3.5-turbo-16k",messages=messages)
+        draft_content=response_draft["choices"][0]["message"]['content']
     # 运行agent
     if csv_file_name:
         if prompt := st.chat_input(placeholder="在这打字"):
