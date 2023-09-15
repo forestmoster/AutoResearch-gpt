@@ -1,4 +1,6 @@
 # imports
+import os
+
 import openai  # for calling the OpenAI API
 import pandas as pd  # for storing text and embeddings data
 import pinecone
