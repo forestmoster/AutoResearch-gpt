@@ -106,7 +106,7 @@ def chunk_docx (title_long:int,MAX_TOKENS:int,BATCH_SIZE:int,uploaded_file:str):
     import pinecone
     # initialize connection to pinecone (get API key at app.pinecone.io)
     pinecone.init(
-        api_key="b0e7c072-995c-4406-8c41-12238d626882",
+        api_key=os.getenv('pine_cone'),
         environment="us-west4-gcp"  # find next to API key in console
     )
 
@@ -156,7 +156,7 @@ def chunk_pdf(title_long: int, MAX_TOKENS: int, BATCH_SIZE: int, uploaded_file: 
 
     # initialize connection to pinecone (get API key at app.pinecone.io)
     pinecone.init(
-        api_key="b0e7c072-995c-4406-8c41-12238d626882",
+        api_key=os.getenv('pine_cone'),
         environment="us-west4-gcp"  # find next to API key in console
     )
 
