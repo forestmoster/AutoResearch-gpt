@@ -231,7 +231,7 @@ class FileChroma:
     def search_upload_files_chroma(self, query):
         wikipedia_strings = []
         db3 = Chroma.from_texts(wikipedia_strings, self.embedding_function, collection_name="state-of-union", persist_directory=self.vector_folder)
-        answer = db3.similarity_search(query, k=3)
+        answer = db3.similarity_search(query, k=5)
         return answer
 
 
