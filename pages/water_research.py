@@ -107,6 +107,7 @@ def update_session_cache(title, response_orgin, title_subfolder):
 
 # xxxxxxxxxxxxxxxxxxxxxxxxx写一个chroma_db的agentxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 def search(query):
+
     s=PDFS.search_upload_files_chroma(query)
     return s
 
