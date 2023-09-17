@@ -21,7 +21,6 @@ from FILE_Chroma import FileChroma, streamlit_sidebar_delete_database
 from control_docx import initialize_doc_with_titles, extract_content_from_doc, delete_section_content, \
     add_or_update_section, add_or_update_tables, add_images_to_section
 import re
-
 # if your deploy app in local you should not use it
 import sys
 __import__("pysqlite3")
@@ -108,7 +107,7 @@ def update_session_cache(title, response_orgin, title_subfolder):
 
 # xxxxxxxxxxxxxxxxxxxxxxxxx写一个chroma_db的agentxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 def search(query):
-    s=PDFS.search_upload_pdfs_chroma(query)
+    s=PDFS.search_upload_files_chroma(query)
     return s
 
 
