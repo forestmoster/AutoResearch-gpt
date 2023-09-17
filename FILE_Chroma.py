@@ -138,8 +138,8 @@ class FileChroma:
     def upload_pdfs_chroma(self, uploaded_files):
         if not uploaded_files:
             return None
-        all_strings = []
         for uploaded_file in uploaded_files:
+            all_strings = []
             if not uploaded_file.name.lower().endswith('.pdf'):
                 continue
             try:
@@ -183,10 +183,9 @@ class FileChroma:
         if not uploaded_files:
             return None  # 或者可以抛出一个异常，例如：raise ValueError("没有上传的文件")
 
-        all_strings = []
         for uploaded_file in uploaded_files:
+            all_strings = []
             file_name = uploaded_file.name
-
             # 确保文件是DOCX文件
             if not file_name.lower().endswith('.docx'):
                 continue
@@ -194,16 +193,13 @@ class FileChroma:
                 paragraphs = self.read_doc_font(uploaded_file)
             except:
                 raise ValueError("不支持的文件类型")
-
             text = []
             text_count = []
             titles = []
-
             for paragraph, font_size, font_bold in paragraphs:
                 if len(text_count) > 0 and len(titles) > 0 and (0 < len(paragraph) <= title_long or font_bold):
                     text_count = []
                     titles = []
-
                 if 0 < len(paragraph) <= title_long or font_bold:
                     titles.append(paragraph)
                 elif len(paragraph) > title_long:
