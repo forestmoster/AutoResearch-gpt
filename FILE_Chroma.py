@@ -101,40 +101,6 @@ class FileChroma:
                 file_path = os.path.join(dir_path, filename)
                 jieba.analyse.set_stop_words(file_path)
 
-    # def upload_pdfs_chroma(self, uploaded_files):
-    #     if uploaded_files:
-    #         ids = []
-    #         for file in uploaded_files:
-    #             if file.name.lower().endswith('.pdf'):
-    #                 ids.append(file.name)
-    #         all_strings = []
-    #         for uploaded_file in uploaded_files:
-    #             if not uploaded_file.name.lower().endswith('.pdf'):
-    #                 continue
-    #             strings = []
-    #             try:
-    #                 pdf_reader = PyPDF2.PdfReader(uploaded_file)
-    #             except:
-    #                 raise ValueError("不支持的文件类型")
-    #             all_text = ""
-    #             for page in pdf_reader.pages:
-    #                 all_text += page.extract_text()
-    #
-    #             title = uploaded_file.name
-    #             url = ''
-    #             self.load_all_stopwords('./stopwords-master')
-    #             tags = jieba.analyse.extract_tags(all_text, topK=10)
-    #             tags_strings = " ".join(tags)
-    #             all_text = all_text.replace('...', '').replace('..', '').strip()
-    #             strings.append((title, url, tags_strings, [all_text]))
-    #             all_strings.extend(strings)
-    #         wikipedia_strings = []
-    #         MAX_TOKENS = 100
-    #         for section in all_strings:
-    #             wikipedia_strings.extend(split.split_strings_from_subsection_pdf(section, max_tokens=MAX_TOKENS))
-    #         st.write(wikipedia_strings)
-    #         pdfsearch = Chroma.from_texts(wikipedia_strings, self.embedding_function, collection_name="state-of-union", persist_directory=self.vector_folder, ids=ids)
-    #         return pdfsearch
     def upload_pdfs_chroma(self, uploaded_files):
         if not uploaded_files:
             return None
@@ -162,6 +128,35 @@ class FileChroma:
             pdfsearch = Chroma.from_texts(wikipedia_strings, self.embedding_function, collection_name="state-of-union",
                                           persist_directory=self.vector_folder, ids=ids)
         # return pdfsearch
+
+    def upload_pdfs_chroma_catch(self, uploaded_files):
+        if not uploaded_files:
+            return None
+        for uploaded_file in uploaded_files:
+            all_strings = []
+            if not uploaded_file.name.lower().endswith('.pdf'):
+                continue
+            try:
+                pdf_reader = PyPDF2.PdfReader(uploaded_file)
+            except:
+                raise ValueError("不支持的文件类型")
+            title = uploaded_file.name
+            url = ''
+            self.load_all_stopwords('./stopwords-master')
+            for page in pdf_reader.pages:
+                page_text = page.extract_text().replace('...', '').replace('..', '').strip()
+                tags = jieba.analyse.extract_tags(page_text, topK=10)
+                tags_strings = " ".join(tags)
+                all_strings.append((title, url, tags_strings, [page_text]))
+            wikipedia_strings = []
+            MAX_TOKENS = 2450
+            for section in all_strings:
+                wikipedia_strings.extend(split.split_strings_from_subsection_pdf(section, max_tokens=MAX_TOKENS))
+            ids = [f"{title}_{i}" for i in range(1, len(wikipedia_strings) + 1)]
+
+            pdfsearch = Chroma.from_texts(wikipedia_strings, self.embedding_function, collection_name="state-of-union",
+                                           ids=ids)
+            return pdfsearch
 
     @staticmethod
     def read_doc_font(uploaded_files):
@@ -261,33 +256,7 @@ def streamlit_sidebar_delete_database(FileChroma):
         FileChroma.delete_vector_database(option)
         st.sidebar.success(f'你已经成功删除{option}', icon="✅")
     st.sidebar.caption(f'数据库中的文件:{titles}', )
-#
-# if 'session_id' not in st.session_state:
-#     st.session_state.session_id = str(uuid.uuid4())  # 创建一个唯一的UUID
-# session_folder = os.path.join('tmp', st.session_state.session_id)
-# vector_folder = os.path.join(session_folder, 'vector')
-# st.write(vector_folder)
-# if not os.path.exists(vector_folder):
-#     os.makedirs(vector_folder)
-# #
-# PDFChroma = PDFChroma(vector_folder)
-# # #
-# uploaded_file = st.file_uploader("选择一个纯文本docx文件或者pdf文件",accept_multiple_files=True,label_visibility="hidden")
-# #
-# if prompt := st.chat_input(placeholder="在这打字"):
-# #
-# #     ids=[]
-# #     for file in uploaded_file:
-# #         if file.name.lower().endswith('.pdf'):
-# #             ids.append(file.name)
-#     upload_pdfs_chroma(uploaded_file, )
-# #     docs=PDFChroma.search_upload_pdfs_chroma(prompt)
-# #     # PDFChroma.delete_vector_database('2')
-# #     st.write('你好',docs)
-# st.sidebar.caption(f'数据库中的文件:{PDFChroma.get_ids()}',)
-# # streamlit_sidebar_delete_database(PDFChroma)
-# # example_db._collection.delete(ids=[ids[-1]])
-# st.write(PDFChroma.get_ids())
+
 
 
 
