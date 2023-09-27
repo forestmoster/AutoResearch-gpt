@@ -202,7 +202,6 @@ class WebChroma:
         wikipedia_strings = []
         for section in strings:
             wikipedia_strings.extend(split.split_strings_from_subsection(section, max_tokens=MAX_TOKENS))
-        st.write(wikipedia_strings)
         # print(wikipedia_strings)
         ids = [f"{url}_{i}" for i in range(1, len(wikipedia_strings) + 1)]
         docsearch = Chroma.from_texts(wikipedia_strings, self.embedding_function, collection_name="state-of-union",
