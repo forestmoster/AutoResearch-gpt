@@ -4,19 +4,11 @@ import jieba.analyse
 from langchain.embeddings import OpenAIEmbeddings
 import streamlit as st
 from langchain.vectorstores import Chroma
-import PyPDF2
-import tempfile
 import split
 import requests
 import json
-from reportlab.lib.pagesizes import letter, landscape
-from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.platypus import SimpleDocTemplate, Paragraph
-from bs4 import BeautifulSoup
 import tempfile
 import PyPDF2
-import os
 # 创建 PDF 文件
 
 import os
