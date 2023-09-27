@@ -52,7 +52,8 @@ def split_strings_from_subsection(
     Each subsection is a tuple of parent titles [H1, H2, ...] and text (str).
     """
     titles,text = subsection
-    string = "\n\n".join([text])
+
+    string = "\n\n".join(titles+[text])
     num_tokens_in_string = num_tokens(string)
     # if length is fine, return string
     if num_tokens_in_string <= max_tokens:
@@ -62,8 +63,8 @@ def split_strings_from_subsection(
         return [truncated_string(string, model=model, max_tokens=max_tokens)]
     # otherwise, split in half and recurse
     else:
-        text = subsection
-        for delimiter in [",",".",'。']:
+        titles,text = subsection
+        for delimiter in [",",".",'。','，',':'';']:
             left, right = halved_by_delimiter(text, delimiter=delimiter)
             if left == "" or right == "":
                 # if either half is empty, retry with a more fine-grained delimiter
@@ -72,7 +73,7 @@ def split_strings_from_subsection(
                 # recurse on each half
                 results = []
                 for half in [left, right]:
-                    half_subsection = (half)
+                    half_subsection = (titles,half)
                     half_strings = split_strings_from_subsection(
                         half_subsection,
                         max_tokens=max_tokens,
